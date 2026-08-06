@@ -39,8 +39,8 @@
     <string name="node_disconnected">节点已断开连接\n请连接到节点以查看余额</string>
     <string name="no_coins_available">暂无可用余额\n收到交易后，您的余额将显示在这里</string>
     <string name="confirm">确认</string>
-    <string name="spend">支出</string>
-    <string name="coins">输出</string>
+    <string name="spend">发送</string>
+    <string name="coins">未花费输出</string>
     <string name="output_number">输出 %1$d</string>
     <string name="battery_optimization_title">电池优化</string>
     <string name="enable">启用</string>
@@ -86,13 +86,13 @@
     <string name="unable_to">无法</string>
     <string name="restore">恢复</string>
     <string name="create">创建</string>
-    <string name="wallet">%1$s %2$s 钱包</string>
+    <string name="wallet">%1$s%2$s钱包</string>
     <string name="restore_height">恢复高度</string>
     <string name="private_view_key">查看私钥 (Private View Key)</string>
     <string name="primary_address">主地址</string>
     <string name="import_view_keys">导入查看私钥</string>
     <string name="invalid_qr_code">无效的二维码</string>
-    <string name="loading">正在加载....</string>
+    <string name="loading">正在加载...</string>
     <string name="unable_to_create_wallet">无法创建钱包</string>
     <string name="enter_new_pin">输入新 PIN</string>
     <string name="enter_pin">输入 PIN</string>
