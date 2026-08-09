@@ -11,11 +11,14 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: recursive
-          lfs: true
           fetch-depth: 0
 
-      - name: Download Git LFS files
-        run: git lfs pull
+      - name: Download LFS files from Upstream
+        run: |
+          git remote add upstream https://github.com/opsec-enthusiast/ANONERO.git
+          git fetch upstream main
+          git lfs install
+          git lfs pull upstream
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
