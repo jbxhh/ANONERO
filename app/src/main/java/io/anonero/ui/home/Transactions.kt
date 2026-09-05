@@ -629,7 +629,7 @@ fun TransactionScreen(
                     walletState.setLoading(false)
                     refreshState.animateToHidden()
                 }
-            },
+            }
         ) {
             LazyColumn(
                 contentPadding = contentPadding
