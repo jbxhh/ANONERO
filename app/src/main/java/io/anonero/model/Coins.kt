@@ -1,8 +1,8 @@
-/* UI-MOCK：返回 2 条假 UTXO，不依赖 native 库 */
+/* UI-MOCK：构造即装 2 条假 UTXO，不依赖 native 库与同步回调 */
 package io.anonero.model
 
 class Coins(private val handle: Long){
-    var all: List<CoinsInfo> = ArrayList()
+    var all: List<CoinsInfo> = refreshJ()
         private set
 
     fun refresh() {
