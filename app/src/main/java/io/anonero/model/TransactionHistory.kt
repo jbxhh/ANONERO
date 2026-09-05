@@ -1,18 +1,4 @@
-/*
- * Copyright (c) 2017 m2049r
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+/* UI-MOCK：空交易列表，不依赖 native 库 */
 package io.anonero.model
 
 import timber.log.Timber
@@ -36,7 +22,7 @@ class TransactionHistory(private val handle: Long, var accountIndex: Int) {
         }
     }
 
-    external fun getCount(): Int
+    fun getCount(): Int = all.size
 
     fun refreshWithNotes(wallet: Wallet) {
         refresh()
@@ -56,11 +42,11 @@ class TransactionHistory(private val handle: Long, var accountIndex: Int) {
         all = transactionInfos
     }
 
-    private external fun refreshJ(): MutableList<TransactionInfo>
+    private fun refreshJ(): MutableList<TransactionInfo> = mutableListOf()
 
     companion object {
         init {
-            System.loadLibrary("anonero")
+            try { System.loadLibrary("anonero") } catch (e: Throwable) {}
         }
     }
 }
