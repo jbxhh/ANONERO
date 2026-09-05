@@ -2,6 +2,8 @@
     <!-- Do not translate the app name. The app_name will be modified by the Gradle build system based on the build variants (Nero/Anon). -->
     <string name="app_name">anonnero</string>
     <!---->
+    <string name="disconnect">断开连接</string>
+    <string name="remove">删除</string>
     <string name="hint_optional">（选填）</string>
     <string name="polyseed_mnemonic"></string>
     <string name="next">下一步</string>
