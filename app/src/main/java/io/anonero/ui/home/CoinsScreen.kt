@@ -182,16 +182,7 @@ fun CoinsScreen(
                             )
                         }
                     },
-                    supportingContent = {
-                        SelectionContainer {
-                            Text(
-                                coin.pub_key,
-                                fontWeight = FontWeight.SemiBold,
-                                fontSize = 14.sp,
-                                textAlign = TextAlign.Justify
-                            )
-                        }
-                    },
+                
                     trailingContent = {
                         Checkbox(
                             checked = selectedCoins.contains(coin.pub_key),
