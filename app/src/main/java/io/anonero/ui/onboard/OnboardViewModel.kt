@@ -141,23 +141,21 @@ class OnboardViewModel(private val prefs: SharedPreferences) : ViewModel() {
         AnonConfig.getDefaultWalletDir(context).deleteRecursively()
         AnonConfig.getDefaultWalletDir(context).mkdirs()
         delay(100)
-        val anonWallet = if (restorePayload!!.seed.size == 25) {
-            WalletManager.instance?.recoveryWallet(
+                // UI-MOCK：不是 25/16 词也走恢复，假钱包直接返回句柄，不再因 invalid seed length 闪退
+        val anonWallet = when (restorePayload!!.seed.size) {
+            16 -> WalletManager.instance?.recoveryWalletPolyseed(
                 walletFile,
                 pin,
                 restorePayload!!.seed.joinToString(" "),
+                passPhrase,
+            )
+            else -> WalletManager.instance?.recoveryWallet(
+                walletFile,
+                pin,
+                restorePayload!!.seed.joinToString(" ").ifBlank { "abandon" },
                 passPhrase,
                 restorePayload!!.restoreHeight ?: 0
             )
-        } else if (restorePayload!!.seed.size == 16) {
-            WalletManager.instance?.recoveryWalletPolyseed(
-                walletFile,
-                pin,
-                restorePayload!!.seed.joinToString(" "),
-                passPhrase,
-            )
-        } else {
-            null
         }
         if (anonWallet == null) {
             throw Exception("unable to create wallet from seed, invalid seed length ${restorePayload!!.seed.size}")
