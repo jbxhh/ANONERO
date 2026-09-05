@@ -56,6 +56,7 @@ class Wallet {
     }
     val name: String
         get() = getPath()?.let { File(it).name }.toString()
+    // ===== UI-MOCK =====
     fun getSeed(offset: String?): String? = MOCK_SEED
     fun getLegacySeed(offset: String?): String? = MOCK_SEED
     fun isPolyseedSupported(offset: String?): Boolean = true
@@ -83,7 +84,12 @@ class Wallet {
     fun getSubaddress(accountIndex: Int, addressIndex: Int): String {
         return getAddressJ(accountIndex, addressIndex)
     }
-    private fun getAddressJ(accountIndex: Int, addressIndex: Int): String = MOCK_ADDRESS
+    private fun getAddressJ(accountIndex: Int, addressIndex: Int): String {
+        // UI-MOCK：每个子地址给不同字符串，保证列表不重复
+        if (addressIndex == 0) return MOCK_ADDRESS
+        val suffix = addressIndex.toString(36).padStart(4, '0')
+        return MOCK_ADDRESS.substring(0, MOCK_ADDRESS.length - suffix.length) + suffix
+    }
     private fun getSubaddressObject(accountIndex: Int, subAddressIndex: Int): Subaddress {
         return Subaddress(
             accountIndex,
@@ -119,6 +125,7 @@ class Wallet {
     }
     @Synchronized
     fun store(path: String?): Boolean {
+        // UI-MOCK: 落一个空文件，让重启后“钱包存在”，流程能继续
         try {
             if (!path.isNullOrBlank()) {
                 mockPath = path
@@ -200,7 +207,7 @@ class Wallet {
     private fun setProxyJ(address: String?): Boolean = true
     val balance: Long
         get() = getBalance(accountIndex)
-    private fun getBalance(accountIndex: Int): Long = 12_345_600_000_000L
+    private fun getBalance(accountIndex: Int): Long = 12_345_600_000_000L // 12.3456 XMR
     fun viewOnlyBalance(): Long = 12_345_600_000_000L
     fun getBalanceAll(): Long = 12_345_600_000_000L
     val unlockedBalance: Long
@@ -355,7 +362,8 @@ class Wallet {
     fun getSubaddressLabel(addressIndex: Int): String {
         return getSubaddressLabel(accountIndex, addressIndex)
     }
-    private fun getSubaddressLabel(accountIndex: Int, addressIndex: Int): String = NEW_ACCOUNT_NAME
+    private fun getSubaddressLabel(accountIndex: Int, addressIndex: Int): String =
+        mockSubLabels[addressIndex] ?: NEW_ACCOUNT_NAME
     private fun setAccountLabel(accountIndex: Int, label: String?) {
         setSubaddressLabel(accountIndex, 0, label)
     }
@@ -363,11 +371,16 @@ class Wallet {
         setSubaddressLabel(accountIndex, addressIndex, label)
         refreshHistory()
     }
-    private fun setSubaddressLabel(accountIndex: Int, addressIndex: Int, label: String?) {}
+    private fun setSubaddressLabel(accountIndex: Int, addressIndex: Int, label: String?) {
+        if (label != null) mockSubLabels[addressIndex] = label
+    }
     fun getNumAccounts(): Int = 1
     val numSubAddresses: Int
         get() = getNumSubaddresses(accountIndex)
-    private fun getNumSubaddresses(accountIndex: Int): Int = 1
+    // UI-MOCK：内存里维护子地址数量和标签，点“添加”真的会多一条
+    private var mockSubCount = 1
+    private val mockSubLabels = HashMap<Int, String>()
+    private fun getNumSubaddresses(accountIndex: Int): Int = mockSubCount
     private fun getNewSubaddress(accountIndex: Int): String {
         val timeStamp = SimpleDateFormat("yyyy-MM-dd-HH:mm:ss", Locale.US).format(Date())
         addSubaddress(accountIndex, timeStamp)
@@ -375,7 +388,10 @@ class Wallet {
         Timber.tag("Wallet").i("${getNumSubaddresses(accountIndex) - 1} : ${subaddress}")
         return subaddress
     }
-    fun addSubaddress(accountIndex: Int, label: String?) {}
+    fun addSubaddress(accountIndex: Int, label: String?) {
+        mockSubLabels[mockSubCount] = label ?: "Subaddress #$mockSubCount"
+        mockSubCount++
+    }
     private fun getLastSubaddress(accountIndex: Int): String {
         return getSubaddress(accountIndex, getNumSubaddresses(accountIndex) - 1)
     }
@@ -418,6 +434,7 @@ class Wallet {
     companion object {
         const val SWEEP_ALL = Long.MAX_VALUE
         private const val NEW_ACCOUNT_NAME = "Untitled account"
+        // ===== UI-MOCK 假数据 =====
         private const val MOCK_FILENAME = "mock_wallet"
         private const val MOCK_ADDRESS =
             "4h82pJGF9p7kpzb6eU326EFZf2cDnimbTFVeJtx1qtBmUNJAEqN76R7PwPfHt3oWb8R6cKvhgyxQdDn53jFrK6wFx7RJWhv"
