@@ -17,7 +17,7 @@
     <string name="initializing_tor">洋葱连接中...</string>
     <string name="copied_to_clipboard">已复制到剪贴板</string>
     <string name="transactions">交易记录</string>
-    <string name="receive">接收</string>
+    <string name="receive">地址</string>
     <string name="send">确定</string>
     <string name="settings">设置</string>
     <string name="set_subaddress_label">子地址标签</string>
