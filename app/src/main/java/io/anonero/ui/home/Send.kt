@@ -551,33 +551,38 @@ fun SendScreen(
                                 )
                         },
                     )
-                    Text(
-                        if (sweep) "${stringResource(R.string.sweeping_balance)} $unLockedAmount ${
-                            stringResource(
-                                R.string.minus_fees
-                            )}" else "${stringResource(R.string.available_balance)}$unLockedAmount",
+                                        Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable {
-                                amountField = if (!sweep) {
-                                    sendViewModel.setSpendType(SpendType.SWEEP)
-                                    unLockedAmount
-                                } else {
-                                    sendViewModel.setSpendType(SpendType.NORMAL)
-                                    ""
-                                }
-                            },
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.labelMedium
-                    )
-                    IconButton(
-                        modifier = Modifier.align(Alignment.CenterHorizontally),
-                        onClick = {
-                            showScanner = true
-                            qrScannerParam = null
-                        }
+                            .padding(end = 8.dp),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(AnonIcons.Scan, contentDescription = "")
+                        Text(
+                            if (sweep) "${stringResource(R.string.sweeping_balance)} $unLockedAmount ${
+                                stringResource(
+                                    R.string.minus_fees
+                                )}" else "${stringResource(R.string.available_balance)}$unLockedAmount",
+                            modifier = Modifier
+                                .clickable {
+                                    amountField = if (!sweep) {
+                                        sendViewModel.setSpendType(SpendType.SWEEP)
+                                        unLockedAmount
+                                    } else {
+                                        sendViewModel.setSpendType(SpendType.NORMAL)
+                                        ""
+                                    }
+                                },
+                            style = MaterialTheme.typography.labelMedium
+                        )
+                        IconButton(
+                            onClick = {
+                                showScanner = true
+                                qrScannerParam = null
+                            }
+                        ) {
+                            Icon(AnonIcons.Scan, contentDescription = "")
+                        }
                     }
 
                     if (!txComposeError.isNullOrEmpty())
