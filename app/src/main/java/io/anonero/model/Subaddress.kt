@@ -35,9 +35,9 @@ class Subaddress(
     val squashedAddress: String
         get() = address.substring(0, 8) + "…" + address.substring(address.length - 8)
 
-        val displayLabel: String
+                val displayLabel: String
         get() = if (label.isEmpty() || DEFAULT_LABEL_FORMATTER.matcher(label)
-                .matches()
+                .matches() || label.startsWith("Subaddress #")
         ) "" else "$label $addressIndex"
 
     companion object {
