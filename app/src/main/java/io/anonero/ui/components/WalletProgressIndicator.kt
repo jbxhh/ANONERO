@@ -79,8 +79,8 @@ fun WalletProgressIndicator(modifier: Modifier = Modifier, refreshIndicatorProgr
         autoHide = true
     }
 
-    AnimatedVisibility(
-        !autoHide && (showIndefiniteLoading || syncProgress != null || !isConnected || !isNetworkConnected || refreshIndicatorProgress != 0.0f),
+        AnimatedVisibility(
+        refreshIndicatorProgress != 0.0f,
         modifier = modifier
             .animateContentSize()
     ) {
