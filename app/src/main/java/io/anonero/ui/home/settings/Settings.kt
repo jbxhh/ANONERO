@@ -1,6 +1,5 @@
 package io.anonero.ui.home.settings
 
-import AnonNeroTheme
 import android.content.SharedPreferences
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -21,7 +20,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,11 +27,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -62,8 +58,6 @@ import org.koin.compose.koinInject
 import org.koin.core.qualifier.named
 import timber.log.Timber
 
-typealias NavigateTo<T> = (to: T) -> Unit
-
 private const val TAG = "SettingsPage"
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -87,13 +81,11 @@ fun SettingsPage(
                 dismissOnBackPress = true,
                 decorFitsSystemWindows = false
             ),
-            onDismissRequest = {
-                showLockScreen = false
-            }) {
+            onDismissRequest = { showLockScreen = false }) {
             LockScreen(
                 mode = LockScreenMode.VERYFY_PIN,
                 modifier = Modifier.fillMaxHeight(0.95f),
-                onUnLocked = { _, shortCut ->
+                onUnLocked = { _, _ ->
                     showLockScreen = false
                     newPinDialog = true
                 }
@@ -108,37 +100,30 @@ fun SettingsPage(
                 dismissOnBackPress = true,
                 decorFitsSystemWindows = false
             ),
-            onDismissRequest = {
-                newPinDialog = false
-            }) {
+            onDismissRequest = { newPinDialog = false }) {
             PinSetup(
                 changePin = true,
                 onNext = {
-                   try {
-                       WalletManager.instance?.wallet?.setPassword(it)
-                       toastState.show("PIN changed successfully",
-                           type = ToastType.Success,
-                       )
-                       prefs.edit(commit = true) {
-                           putString(
-                               PREFS_PIN_HASH,
-                               CrazyPassEncoder.encode(
-                                   it.toByteArray().let { bytes ->
-                                       if (bytes.size < 32) {
-                                           bytes + ByteArray(32 - bytes.size)
-                                       } else bytes
-                                   }
-                               )
-                           )
-                       }
-                   }catch (e: Exception) {
-                       toastState.show("Error changing PIN. Check logs for more details",
-                           type = ToastType.Error
-                       )
-                       Timber.tag(TAG).e(e)
-                   }finally {
-                       newPinDialog = false
-                   }
+                    try {
+                        WalletManager.instance?.wallet?.setPassword(it)
+                        toastState.show("PIN changed successfully", type = ToastType.Success)
+                        prefs.edit(commit = true) {
+                            putString(
+                                PREFS_PIN_HASH,
+                                CrazyPassEncoder.encode(
+                                    it.toByteArray().let { bytes ->
+                                        if (bytes.size < 32) bytes + ByteArray(32 - bytes.size)
+                                        else bytes
+                                    }
+                                )
+                            )
+                        }
+                    } catch (e: Exception) {
+                        toastState.show("Error changing PIN", type = ToastType.Error)
+                        Timber.tag(TAG).e(e)
+                    } finally {
+                        newPinDialog = false
+                    }
                 }
             )
         }
@@ -154,111 +139,64 @@ fun SettingsPage(
         topBar = {
             TopAppBar(
                 navigationIcon = {
-                    IconButton(
-                        onClick = onBackPress
-                    ) {
+                    IconButton(onClick = onBackPress) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
                     }
                 },
-                title = {
-                    Text("")
-                }
+                title = { Text("") }
             )
         }
-    ) {
-        val settingsMenuHeaderStyle = MaterialTheme.typography.titleLarge.copy(
-            color = MaterialTheme.colorScheme.primary
-        )
-
+    ) { padding ->
         Box(
             modifier = Modifier
-                .padding(it)
+                .padding(padding)
                 .fillMaxSize()
         ) {
-            Column(
-
-            ) {
-                LazyColumn(
-                    modifier = Modifier
-                        .padding(
-                            horizontal = 12.dp
-                        )
-                ) {
+            Column {
+                LazyColumn(modifier = Modifier.padding(horizontal = 12.dp)) {
                     item {
-                        Text(
-                            stringResource(R.string.settings_connection),
-                            style = settingsMenuHeaderStyle,
-                            modifier = Modifier.padding(
-                                vertical = 12.dp,
-                                horizontal = 8.dp
-                            )
-                        )
+                        SectionHeader(stringResource(R.string.settings_connection))
                     }
                     item {
-                        HorizontalDivider(
-                            thickness = 2.5.dp
-                        )
-                        SettingsMenuItem(
-                            title = stringResource(R.string.settings_node_settings),
-                            onClick = {
-                                navigateTo(SettingsNodeRoute)
-                            })
-                        HorizontalDivider(
-                            thickness = 2.5.dp
-                        )
-                    }
-                    item {
-                        SettingsMenuItem(title = stringResource(R.string.settings_proxy_settings), onClick = {
-                            navigateTo(ProxySettingsRoute)
-                        })
-                        HorizontalDivider(
-                            thickness = 2.5.dp
-                        )
-                    }
-                    item {
-                        Text(
-                            stringResource(R.string.settings_security),
-                            style = settingsMenuHeaderStyle,
-                            modifier = Modifier.padding(
-                                vertical = 12.dp,
-                                horizontal = 8.dp
-                            )
-                        )
-                    }
-                    if (!AnonConfig.viewOnly)
-                        item {
-                            SettingsMenuItem(title = stringResource(R.string.settings_seed), onClick = {
-                                navigateTo(SettingsViewSeedRoute)
-                            })
-                            HorizontalDivider(
-                                thickness = 2.5.dp
-                            )
+                        MenuItem(stringResource(R.string.settings_node_settings)) {
+                            navigateTo(SettingsNodeRoute)
                         }
+                        HorizontalDivider(thickness = 2.5.dp)
+                    }
                     item {
-                        SettingsMenuItem(title = stringResource(R.string.settings_change_pin), onClick = {
+                        MenuItem(stringResource(R.string.settings_proxy_settings)) {
+                            navigateTo(ProxySettingsRoute)
+                        }
+                        HorizontalDivider(thickness = 2.5.dp)
+                    }
+                    item {
+                        SectionHeader(stringResource(R.string.settings_security))
+                    }
+                    if (!AnonConfig.viewOnly) {
+                        item {
+                            MenuItem(stringResource(R.string.settings_seed)) {
+                                navigateTo(SettingsViewSeedRoute)
+                            }
+                            HorizontalDivider(thickness = 2.5.dp)
+                        }
+                    }
+                    item {
+                        MenuItem(stringResource(R.string.settings_change_pin)) {
                             showLockScreen = true
-                        })
-                        HorizontalDivider(
-                            thickness = 2.5.dp
-                        )
+                        }
+                        HorizontalDivider(thickness = 2.5.dp)
                     }
                     item {
-                        SettingsMenuItem(title = stringResource(R.string.settings_export_backup), onClick = {
+                        MenuItem(stringResource(R.string.settings_export_backup)) {
                             navigateTo(SettingsExportBackUp)
-                        })
-                        HorizontalDivider(
-                            thickness = 2.5.dp
-                        )
+                        }
+                        HorizontalDivider(thickness = 2.5.dp)
                     }
                     item {
-                        SettingsMenuItem(
-                            title = stringResource(R.string.settings_secure_wipe),
-                            onClick = {
-                                navigateTo(SecureWipeRoute)
-                            })
-                        HorizontalDivider(
-                            thickness = 2.5.dp
-                        )
+                        MenuItem(stringResource(R.string.settings_secure_wipe)) {
+                            navigateTo(SecureWipeRoute)
+                        }
+                        HorizontalDivider(thickness = 2.5.dp)
                     }
                 }
             }
@@ -269,51 +207,51 @@ fun SettingsPage(
                     .padding(bottom = 64.dp)
             ) {
                 Text(
-                    stringResource(R.string.settings_app_version, stringResource(R.string.app_name), BuildConfig.VERSION_NAME),
-                    style = MaterialTheme.typography.labelLarge.copy(
-                        color = MaterialTheme.colorScheme.onSecondary.copy(
-                            alpha = 0.6f,
-                        ),
-                        fontSize = 12.sp
+                    stringResource(
+                        R.string.settings_app_version,
+                        stringResource(R.string.app_name),
+                        BuildConfig.VERSION_NAME
                     ),
+                    style = MaterialTheme.typography.labelLarge.copy(
+                        color = MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.6f)
+                    ),
+                    fontSize = 12.sp,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.clickable { navigateTo(SettingsLogs) }
+                    modifier = Modifier.clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) { navigateTo(SettingsLogs) }
                 )
             }
         }
     }
 }
 
+@Composable
+private fun SectionHeader(text: String) {
+    Text(
+        text,
+        style = MaterialTheme.typography.titleLarge.copy(color = MaterialTheme.colorScheme.primary),
+        modifier = Modifier.padding(vertical = 12.dp, horizontal = 8.dp)
+    )
+}
 
 @Composable
-fun SettingsMenuItem(
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
-    title: String = "",
-) {
-    val settingsMenuStyle = MaterialTheme.typography.titleMedium.copy()
-
+private fun MenuItem(title: String, onClick: () -> Unit) {
     ListItem(
         modifier = Modifier
             .padding(horizontal = 4.dp)
             .clickable(
-                onClick = onClick,
                 interactionSource = remember { MutableInteractionSource() },
-                indication = ripple()
+                indication = null,
+                onClick = onClick
             ),
-        headlineContent = {
-            Text(
-                title, style = settingsMenuStyle,
-            )
-        }
+        headlineContent = { Text(title, style = MaterialTheme.typography.titleMedium) }
     )
 }
-
 
 @Preview(device = "id:pixel_5")
 @Composable
 private fun SettingsPagePrev() {
-    AnonNeroTheme {
-        SettingsPage()
-    }
+    AnonNeroTheme { SettingsPage() }
 }
