@@ -100,26 +100,25 @@ fun ReceiveScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top,
             ) {
-                item {
-                    Text(
-                        item {
-    if (!nextAddress!!.label.isNullOrEmpty()) {
-        Text(
-            text = "${nextAddress!!.label} ${nextAddress!!.addressIndex}",
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable {
-                    labelDialog = true
-                },
-            style = MaterialTheme.typography.bodyLarge.copy(
-                color = MaterialTheme.colorScheme.primary,
-                fontSize = 30.sp,
-                fontWeight = FontWeight.Bold
-            ),
-        )
-    }
-                        }
+                                item {
+                    if (!nextAddress!!.label.isNullOrEmpty()) {
+                        Text(
+                            text = "${nextAddress!!.label} ${nextAddress!!.addressIndex}",
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    labelDialog = true
+                                },
+                            style = MaterialTheme.typography.bodyLarge.copy(
+                                color = MaterialTheme.colorScheme.primary,
+                                fontSize = 30.sp,
+                                fontWeight = FontWeight.Bold
+                            ),
+                        )
+                    }
+                }
+
                 item {
                     Spacer(Modifier.height(24.dp))
                 }
