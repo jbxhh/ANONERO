@@ -1,6 +1,6 @@
 package io.anonero.ui.home.settings
 
-import io.anonero.ui.theme.AnonNeroTheme
+import AnonNeroTheme
 import android.content.SharedPreferences
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
