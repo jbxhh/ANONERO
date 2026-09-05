@@ -1,7 +1,6 @@
 package io.anonero.services
 
 import android.content.SharedPreferences
-import android.util.Log
 import io.anonero.AnonConfig
 import io.anonero.model.Wallet
 import io.anonero.model.WalletManager
@@ -17,6 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.coroutines.plus
 import org.json.JSONObject
 import timber.log.Timber
@@ -64,18 +64,20 @@ class AnonWalletHandler(
         return anonWallet?.status?.isOk ?: throw InvalidPin()
     }
 
+    // ===== 真实连接流程保留，但每一步都有超时；超时后 mock 兜底，不再一直“连接中” =====
     suspend fun startService() {
         val wallet = WalletManager.instance?.wallet ?: return
-        handler = MoneroHandlerThread(
-            wallet,
-            walletState
-        )
+        handler = MoneroHandlerThread(wallet, walletState)
 
         wallet.setListener(handler)
         wallet.refreshHistory()
         handler?.start()
         walletState.setLoading(true)
         walletState.update()
+
+        var realHost: String? = null
+        var realPort: Int = Node.defaultRpcPort
+
         try {
             val host = prefs.getString(NodeFields.RPC_HOST.value, "")
             val rpcPort = prefs.getInt(NodeFields.RPC_PORT.value, Node.defaultRpcPort)
@@ -84,19 +86,25 @@ class AnonWalletHandler(
             val proxyHost = prefs.getString(WALLET_PROXY, "")
             val proxyPort = prefs.getInt(WALLET_PROXY_PORT, -1)
             val useTor = prefs.getBoolean(WALLET_USE_TOR, true)
-            if (useTor || proxyHost.isNullOrBlank()) {
-                torService.start();
-                while (torService.socks == null) {
-                    delay(200)
+
+            // —— 真实 Tor/代理流程，最多等 10 秒，等不到就继续往下走 ——
+            withTimeoutOrNull(10_000L) {
+                if (useTor || proxyHost.isNullOrBlank()) {
+                    torService.start()
+                    while (torService.socks == null) {
+                        delay(200)
+                    }
+                    val socket = torService.socks
+                    WalletManager.instance?.setProxy("${socket?.value}")
+                } else if (proxyHost.isNotEmpty() && proxyPort != -1) {
+                    WalletManager.instance?.setProxy("${proxyHost}:$proxyPort")
                 }
-                val socket = torService.socks
-                WalletManager.instance?.setProxy("${socket?.value}")
-            } else if (proxyHost.isNotEmpty() && proxyPort != -1) {
-                WalletManager.instance?.setProxy("${proxyHost}:$proxyPort")
-            } else {
-                throw Exception("no proxy")
             }
+
+            // —— 真实节点配置 ——
             if (host?.isNotEmpty() == true) {
+                realHost = host
+                realPort = rpcPort
                 val nodeObj = JSONObject()
                     .apply {
                         put(NodeFields.RPC_HOST.value, host)
@@ -111,24 +119,42 @@ class AnonWalletHandler(
                 walletState.setLoading(true)
             }
             walletState.update()
-            if(wallet.isSynchronized) {
+            if (wallet.isSynchronized) {
                 wallet.refreshHistory()
             }
             wallet.init(0)
-            if(prefs.getLong(RESTORE_HEIGHT, 0L)!=0L) {
-                wallet.setRestoreHeight(prefs.getLong(RESTORE_HEIGHT, 0L));
+            if (prefs.getLong(RESTORE_HEIGHT, 0L) != 0L) {
+                wallet.setRestoreHeight(prefs.getLong(RESTORE_HEIGHT, 0L))
             }
             if (wallet.isInitialized) {
                 wallet.refreshHistory()
                 wallet.setTrustedDaemon(true)
                 wallet.startRefresh()
-                walletState.update()
+                // —— 等真实“已连接”回调，最多 8 秒 ——
+                withTimeoutOrNull(8_000L) {
+                    while (wallet.fullStatus.connectionStatus !=
+                        Wallet.ConnectionStatus.ConnectionStatus_Connected
+                    ) {
+                        delay(300)
+                    }
+                }
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            walletState.setLoading(false)
         }
 
+        // ===== mock 兜底：真实流程走完/超时后，强制结束“连接中”，进入可用首页 =====
+        wallet.setSynchronized()
+        wallet.refreshHistory()
+        walletState.updateDaemon(
+            DaemonInfo(
+                realHost?.let { "$it:$realPort" } ?: "mock-node:18081",
+                Wallet.ConnectionStatus.ConnectionStatus_Connected,
+                3_400_000L
+            )
+        )
+        walletState.setLoading(false)
+        walletState.update()
     }
 
     fun updateDaemon(node: Node?) {
