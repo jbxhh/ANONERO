@@ -139,7 +139,7 @@ fun CoinsScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text("Coins")
+                    Text("输出")
                 },
                 navigationIcon = {
                     IconButton(
