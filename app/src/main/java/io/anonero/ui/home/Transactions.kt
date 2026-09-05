@@ -583,7 +583,6 @@ fun TransactionScreen(
                                 }
                             )
                         
-                            )
                             if (AnonConfig.viewOnly) {
                                 DropdownMenuItem(
                                     text = { Text(stringResource(R.string.show_outputs)) },
