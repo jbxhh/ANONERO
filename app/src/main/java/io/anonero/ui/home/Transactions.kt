@@ -1,6 +1,8 @@
 package io.anonero.ui.home
 
-import AnonNeroTheme
+import AnonNeroTheme 
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.PullToRefreshBox
 import android.view.HapticFeedbackConstants
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
@@ -575,10 +577,13 @@ fun TransactionScreen(
                                  DropdownMenuItem(
                                 text = { Text(stringResource(R.string.refresh)) },
                                 onClick = {
+                                    showMenu = false
                                     scope.launch {
+                                        view.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
                                         walletState.setLoading(true)
-                                        delay(1500)
+                                        walletState.refresh()
                                         walletState.setLoading(false)
+                                        refreshState.animateToHidden()
                                     }
                                 }
                             )
@@ -616,23 +621,15 @@ fun TransactionScreen(
 
         }
     ) { contentPadding ->
-        PullToRefreshBox(
-            isRefreshing = false,
-            state = refreshState,
-            modifier = Modifier
-                .hazeSource(
-                    state = hazeState,
-                ),
-            onRefresh = {
+        onRefresh = {
                 scope.launch {
-                    view.performHapticFeedback(
-                        HapticFeedbackConstants.CONFIRM
-                    )
+                    view.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+                    walletState.setLoading(true)
                     walletState.refresh()
+                    walletState.setLoading(false)
                     refreshState.animateToHidden()
                 }
             },
-            indicator = {}
         ) {
             LazyColumn(
                 contentPadding = contentPadding
