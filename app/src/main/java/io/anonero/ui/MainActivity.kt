@@ -71,6 +71,14 @@ class MainActivity : ComponentActivity() {
         val splashscreen = installSplashScreen()
         var isAppReady by mutableStateOf(false)
         super.onCreate(savedInstanceState)
+                getSharedPreferences("crash_prefs", 0).getString("last_crash", null)?.let { crash ->
+            getSharedPreferences("crash_prefs", 0).edit().remove("last_crash").apply()
+            android.app.AlertDialog.Builder(this)
+                .setTitle("上次崩溃日志（截图发我）")
+                .setMessage(crash.take(2000))
+                .setPositiveButton("知道了", null)
+                .show()
+        }
 
         val scrimColor = Color.Black.copy(alpha = 0.1f).toArgb()
         splashscreen.setKeepOnScreenCondition { isAppReady }
