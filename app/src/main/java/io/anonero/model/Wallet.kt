@@ -433,7 +433,7 @@ class Wallet {
     }
     companion object {
         const val SWEEP_ALL = Long.MAX_VALUE
-        private const val NEW_ACCOUNT_NAME = "Untitled account"
+        private const val NEW_ACCOUNT_NAME = ""
         // ===== UI-MOCK 假数据 =====
         private const val MOCK_FILENAME = "mock_wallet"
         private const val MOCK_ADDRESS =
