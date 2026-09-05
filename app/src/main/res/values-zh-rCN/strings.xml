@@ -97,7 +97,7 @@
     <string name="enter_new_pin">输入新PIN</string>
     <string name="enter_pin">输入PIN</string>
     <string name="confirm_pin">确认PIN</string>
-    <string name="enter_seed_phrase">输入助记词</string>
+    <string name="enter_seed_phrase">输入短语密码</string>
     <string name="backup_preview">备份预览</string>
     <string name="host">节点</string>
     <string name="encrypted_backup">加密备份</string>
