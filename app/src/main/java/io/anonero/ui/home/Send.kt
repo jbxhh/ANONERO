@@ -555,7 +555,7 @@ fun SendScreen(
                         if (sweep) "${stringResource(R.string.sweeping_balance)} $unLockedAmount ${
                             stringResource(
                                 R.string.minus_fees
-                            )}" else "${stringResource(R.string.available_balance)} $unLockedAmount ",
+                            )}" else "${stringResource(R.string.available_balance)}$unLockedAmount",
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
@@ -593,10 +593,7 @@ fun SendScreen(
 
                     if (coins.isNotEmpty())
                         Text(
-                            text = "${if (coins.size == 1) stringResource(R.string._1_coin_selected) else "${coins.size} ${
-                                stringResource(
-                                    R.string.coins_selected
-                                )}"}",
+                                                        text = "已选择 ${coins.size} 个输出",
                             modifier = Modifier
                                 .align(CenterHorizontally)
                                 .padding(
