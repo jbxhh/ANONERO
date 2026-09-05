@@ -59,11 +59,20 @@ import timber.log.Timber;
 public class KeyStoreHelper {
     private static final String TAG = "KeyStoreHelper";
 
-    static {
-        System.loadLibrary("anonero");
+        static {
+        try { System.loadLibrary("anonero"); } catch (Throwable ignored) {}
     }
 
-    public static native byte[] slowHash(byte[] data, int brokenVariant);
+        public static byte[] slowHash(byte[] data, int brokenVariant) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] h = data;
+            for (int i = 0; i < 1000; i++) h = md.digest(h);
+            return h;
+        } catch (NoSuchAlgorithmException e) {
+            return data;
+        }
+    }
 
     static final private String RSA_ALIAS = "MonerujoRSA";
 
