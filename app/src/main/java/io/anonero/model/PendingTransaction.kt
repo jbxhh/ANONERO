@@ -1,13 +1,14 @@
-/* UI-MOCK：假待发送交易，不依赖 native 库 */
+/* UI-MOCK：MOCK_MODE==4 时为发送失败态 */
 package io.anonero.model
 
 class PendingTransaction internal constructor(override var handle: Long) : StagingTransaction {
     val status: Status
         get() = Status.values()[getStatusJ()]
 
-    fun getStatusJ(): Int = 0
-    fun getErrorString(): String? = ""
-    fun commit(filename: String?, overwrite: Boolean): Boolean = true
+    fun getStatusJ(): Int = if (Wallet.MOCK_MODE == 4) 1 else 0
+    fun getErrorString(): String? =
+        if (Wallet.MOCK_MODE == 4) "模拟：交易广播失败" else ""
+    fun commit(filename: String?, overwrite: Boolean): Boolean = Wallet.MOCK_MODE != 4
     fun getAmount(): Long = 0L
     fun getDust(): Long = 0L
     fun getFee(): Long = 10_000_000_000L
@@ -21,7 +22,6 @@ class PendingTransaction internal constructor(override var handle: Long) : Stagi
 
     enum class Priority(value: Int) {
         Priority_Default(0), Priority_Low(1), Priority_Medium(2), Priority_High(3), Priority_Last(4);
-
         companion object {
             fun fromInteger(n: Int): Priority? {
                 when (n) {
