@@ -351,7 +351,7 @@ fun NodeSettings(onBackPress: () -> Unit = {}) {
                             onClick = {
                                 showNodeDetails = true
                             }
-                        ) { Text("Add Node") }
+                        ) { Text("添加节点") }
                         IconButton(
                             colors = IconButtonDefaults.iconButtonColors(
                                 contentColor = Color.White
@@ -375,7 +375,7 @@ fun NodeSettings(onBackPress: () -> Unit = {}) {
                                 onDismissRequest = { showMenu = false }
                             ) {
                                 DropdownMenuItem(
-                                    text = { Text("Resync BlockChain") },
+                                    text = { Text("重置同步区块") },
                                     onClick = {
                                         showMenu = false
                                         val result = walletState.resyncBlockchain()
@@ -402,7 +402,7 @@ fun NodeSettings(onBackPress: () -> Unit = {}) {
 
                     },
                     title = {
-                        Text("Nodes")
+                        Text("节点")
                     },
                 )
                 WalletProgressIndicator()
@@ -432,7 +432,7 @@ fun NodeSettings(onBackPress: () -> Unit = {}) {
                             )
                             .background(color = Color.Black)
                     ) {
-                        Text("Available Nodes", style = MaterialTheme.typography.bodySmall)
+                        Text("可用节点", style = MaterialTheme.typography.bodySmall)
                         Spacer(Modifier.padding(4.dp))
                         HorizontalDivider()
                     }
@@ -513,7 +513,7 @@ fun NodeListItem(
         supportingContent = {
             if (active)
                 Text(
-                    "Daemon Height : ${daemonStatus?.daemonHeight?.toString() ?: ""} ",
+                    "区块高度: ${daemonStatus?.daemonHeight?.toString() ?: ""} ",
                     style = MaterialTheme
                         .typography.bodySmall,
                     modifier = Modifier.padding(top = 4.dp)
