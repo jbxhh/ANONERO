@@ -296,8 +296,8 @@ class WalletManager {
             }
             private set
 
-        init {
-            System.loadLibrary("anonero")
+                init {
+            try { System.loadLibrary("anonero") } catch (e: Throwable) {}
         }
 
         fun addressPrefix(networkType: NetworkType): String {
