@@ -599,7 +599,7 @@ fun NodeForm(
             ListItem(
                 headlineContent = {
                     Text(
-                        text = "NODE",
+                                                text = stringResource(R.string.node),
                         color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.padding(start = 4.dp)
                     )
@@ -629,7 +629,7 @@ fun NodeForm(
             ListItem(
                 headlineContent = {
                     Text(
-                        text = "Username",
+                                                text = stringResource(R.string.username),
                         color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.padding(start = 4.dp)
                     )
@@ -640,7 +640,7 @@ fun NodeForm(
                         shape = MaterialTheme.shapes.medium,
                         placeholder = {
                             Text(
-                                text = "(Optional)",
+                         text = stringResource(R.string.hint_optional),
                                 color = labelColor
                             )
                         },
@@ -658,7 +658,7 @@ fun NodeForm(
             ListItem(
                 headlineContent = {
                     Text(
-                        text = "PASSWORD",
+                        text = stringResource(R.string.password),
                         color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.padding(start = 4.dp)
                     )
@@ -675,7 +675,7 @@ fun NodeForm(
                         ),
                         placeholder = {
                             Text(
-                                text = "(Optional)",
+                                 text = stringResource(R.string.hint_optional),
                                 color = labelColor
                             )
                         },
