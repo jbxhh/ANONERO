@@ -2,7 +2,6 @@ package io.anonero.ui.home
 
 import AnonNeroTheme 
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.PullToRefreshBox
 import android.view.HapticFeedbackConstants
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
@@ -620,8 +619,11 @@ fun TransactionScreen(
             )
 
         }
+    // 改后（粘贴）：
     ) { contentPadding ->
-        onRefresh = {
+        PullToRefreshBox(
+            isRefreshing = showIndefiniteLoading,
+            onRefresh = {
                 scope.launch {
                     view.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
                     walletState.setLoading(true)
@@ -632,6 +634,7 @@ fun TransactionScreen(
             }
         ) {
             LazyColumn(
+
                 contentPadding = contentPadding
             ) {
                 stickyHeader(key = "progress") {
