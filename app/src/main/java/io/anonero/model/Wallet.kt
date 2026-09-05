@@ -1,5 +1,6 @@
 /*
- * UI-MOCK：原 native(external) 方法全部改为 Kotlin 假实现，仅用于 UI/UX 走查
+ * UI-MOCK 版本：所有原 native(external) 方法改为 Kotlin 假实现，
+ * 不依赖 libanonero.so / Monero 静态库，仅用于 UI/UX 走查（全页面可点通）。
  */
 package io.anonero.model
 import io.anonero.AnonConfig
@@ -67,7 +68,8 @@ class Wallet {
             walletStatus.connectionStatus = connectionStatus
             return walletStatus
         }
-    private fun statusWithErrorString(): Status = Status(0, "")
+    private fun statusWithErrorString(): Status =
+        if (MOCK_MODE == 1) Status(1, "模拟：钱包打开失败") else Status(0, "")
     @Synchronized
     fun setPassword(password: String?): Boolean = true
     val address: String
@@ -190,7 +192,7 @@ class Wallet {
             val s = getConnectionStatusJ()
             return ConnectionStatus.values()[s]
         }
-    private fun getConnectionStatusJ(): Int = 1
+    private fun getConnectionStatusJ(): Int = if (MOCK_MODE == 2) 0 else 1
     fun setTrustedDaemon(trusted: Boolean): Boolean = true
     fun setProxy(address: String?): Boolean {
         return setProxyJ(address)
@@ -206,7 +208,7 @@ class Wallet {
     fun getUnlockedBalanceAll(): Long = 11_000_000_000_000L
     fun getUnlockedBalance(accountIndex: Int): Long = 11_000_000_000_000L
     fun isWatchOnly(): Boolean = false
-    fun getBlockChainHeight(): Long = 3_400_000L
+    fun getBlockChainHeight(): Long = if (MOCK_MODE == 3) 1_700_000L else 3_400_000L
     fun getApproximateBlockChainHeight(): Long = 3_400_000L
     fun getDaemonBlockChainHeight(): Long = 3_400_000L
     fun getDaemonBlockChainTargetHeight(): Long = 3_400_000L
@@ -283,18 +285,7 @@ class Wallet {
     }
     @Throws(java.lang.Exception::class)
     private fun checkSelectedAmounts(selectedUtxos: List<String>, amount: Long, sendAll: Boolean) {
-        if (!sendAll) {
-            var amountSelected: Long = 0
-            for (coinsInfo in getUtxos()) {
-                if (selectedUtxos.contains(coinsInfo.key)) {
-                    amountSelected += coinsInfo.amount
-                }
-            }
-            if (amountSelected <= amount) {
-                Timber.tag("Wallet").e("insufficient wallet balance- Available/Selected: $amountSelected, amount: $amount")
-                throw java.lang.Exception("insufficient wallet balance")
-            }
-        }
+        // UI-MOCK：跳过余额校验，普通转账也能走到成功页
     }
     private fun createSweepTransaction(
         dstAddr: String, paymentId: String,
@@ -432,6 +423,8 @@ class Wallet {
             "4h82pJGF9p7kpzb6eU326EFZf2cDnimbTFVeJtx1qtBmUNJAEqN76R7PwPfHt3oWb8R6cKvhgyxQdDn53jFrK6wFx7RJWhv"
         private const val MOCK_SEED =
             "abbey ability abiding abort absorb abstract absurd abuse access accident account accuse achieve acid acoustic acquire across act action actor actress adapt adept adjust admire"
+        // 测试场景开关：0 全成功 / 1 钱包错误 / 2 节点断开 / 3 同步中 / 4 发送失败
+        @JvmField var MOCK_MODE = 0
         init {
             try { System.loadLibrary("anonero") } catch (e: Throwable) {}
         }
