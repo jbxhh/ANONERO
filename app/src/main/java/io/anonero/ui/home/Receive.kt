@@ -61,7 +61,7 @@ fun ReceiveScreen(
     val clipboardManager = LocalClipboardManager.current
     if (labelDialog)
         SubAddressLabelDialog(
-            label = nextAddress!!.displayLabel,
+            label = nextAddress!!.label,
             onSave = { label ->
                 walletState.updateAddressLabel(label, nextAddress!!.addressIndex)
                 labelDialog = false
@@ -102,21 +102,24 @@ fun ReceiveScreen(
             ) {
                 item {
                     Text(
-                        text = nextAddress!!.displayLabel,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                labelDialog = true
-                            },
-                        style = MaterialTheme.typography.bodyLarge.copy(
-                            color = MaterialTheme.colorScheme.primary,
-                            fontSize = 30.sp,
-                            fontWeight = FontWeight.Bold
-                        ),
-                    )
-
-                }
+                        item {
+    if (!nextAddress!!.label.isNullOrEmpty()) {
+        Text(
+            text = "${nextAddress!!.label} ${nextAddress!!.addressIndex}",
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    labelDialog = true
+                },
+            style = MaterialTheme.typography.bodyLarge.copy(
+                color = MaterialTheme.colorScheme.primary,
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold
+            ),
+        )
+    }
+                        }
                 item {
                     Spacer(Modifier.height(24.dp))
                 }
