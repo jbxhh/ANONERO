@@ -547,7 +547,7 @@ fun NodeListItem(
                     onDismissRequest = { menu = false }
                 ) {
                     DropdownMenuItem(
-                        text = { Text(if (active) "Disconnect" else "Connect") },
+                       text = { Text(if (active) stringResource(R.string.disconnect) else stringResource(R.string.connect)) },
                         onClick = {
                             if (active) onDisconnect(node) else onConnect(node)
                             menu = false
@@ -556,7 +556,7 @@ fun NodeListItem(
                     if (!active) {
                         HorizontalDivider()
                         DropdownMenuItem(
-                            text = { Text("Remove") },
+                            text = { Text(stringResource(R.string.remove)) },
                             onClick = {
                                 onRemove(node)
                                 menu = false
