@@ -130,7 +130,7 @@ fun HomeScreenComposable(modifier: Modifier = Modifier, mainNavController: NavHo
             },
             text = {
                                 Text(
-                    "为了让钱包在后台正常运行，建议关闭电池优化。\\n你随时可以在 Android 应用设置中更改此项。\\n\\n是否现在前往设置？"
+                    "为了让钱包在后台正常运行，建议关闭电池优化。你随时可以在应用设置中更改此项。是否现在前往设置？"
                 )
             },
             confirmButton = {
