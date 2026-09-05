@@ -48,7 +48,7 @@
     <string name="enter_current_pin">输入当前PIN</string>
     <string name="unlock_wallet">输入PIN</string>
     <string name="wallet_not_connected_to_node_please_check_network">钱包未连接到节点，请检查网络</string>
-    <string name="address">接收地址</string>
+    <string name="address">地址</string>
     <string name="constructing_transaction">正在构建交易...</string>
     <string name="invalid_address">无效地址</string>
     <string name="amount">数量</string>
