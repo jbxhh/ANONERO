@@ -172,7 +172,7 @@ fun RestoreWallet(
                 )
                 Spacer(Modifier.height(16.dp))
                 Text(
-                    text = "IMPORT POLYSEED MNEMONIC",
+                    text = "",
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold
                 )
@@ -186,7 +186,7 @@ fun RestoreWallet(
                 ListItem(
                     headlineContent = {
                         Text(
-                            text = "ENTER SEED",
+                            text = "助记词",
                             color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(start = 4.dp)
                         )
