@@ -98,8 +98,14 @@ class AnonApplication : Application(), Thread.UncaughtExceptionHandler {
         super.onTerminate()
     }
 
-    override fun uncaughtException(t: Thread, e: Throwable) {
+        override fun uncaughtException(t: Thread, e: Throwable) {
         Timber.tag(TAG).e(e)
+        try {
+            val sw = java.io.StringWriter()
+            e.printStackTrace(java.io.PrintWriter(sw))
+            getSharedPreferences("crash_prefs", 0).edit()
+                .putString("last_crash", sw.toString()).commit()
+        } catch (_: Throwable) {}
         defaultHandler?.uncaughtException(t, e)
     }
 
