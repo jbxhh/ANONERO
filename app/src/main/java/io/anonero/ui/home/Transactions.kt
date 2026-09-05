@@ -572,10 +572,14 @@ fun TransactionScreen(
                                     navigateTo(CoinsScreenRoute)
                                 }
                             )
-                            DropdownMenuItem(
+                                 DropdownMenuItem(
                                 text = { Text(stringResource(R.string.refresh)) },
                                 onClick = {
-                                    navigateTo(CoinsScreenRoute)
+                                    scope.launch {
+                                        walletState.setLoading(true)
+                                        delay(1500)
+                                        walletState.setLoading(false)
+                                    }
                                 }
                             )
                             DropdownMenuItem(
