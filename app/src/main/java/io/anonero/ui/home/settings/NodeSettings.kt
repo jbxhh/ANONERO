@@ -616,7 +616,7 @@ fun NodeForm(
                         ),
                         placeholder = {
                             Text(
-                                text = "http://address.onion:port",
+                           text = stringResource(R.string.onion_address_example),
                                 color = labelColor
                             )
                         },
