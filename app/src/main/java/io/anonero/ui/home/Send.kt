@@ -571,7 +571,8 @@ fun SendScreen(
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.labelMedium
                     )
-                    IconButton(
+                        IconButton(
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
                         onClick = {
                             showScanner = true
                             qrScannerParam = null
