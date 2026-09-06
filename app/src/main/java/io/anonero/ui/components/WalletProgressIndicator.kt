@@ -80,7 +80,7 @@ fun WalletProgressIndicator(modifier: Modifier = Modifier, refreshIndicatorProgr
     }
 
         AnimatedVisibility(
-        refreshIndicatorProgress != 0.0f,
+        refreshIndicatorProgress != 0.0f || showIndefiniteLoading || isSyncing,
         modifier = modifier
             .animateContentSize()
     ) {
