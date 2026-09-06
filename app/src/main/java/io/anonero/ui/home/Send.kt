@@ -730,12 +730,7 @@ fun SendScreen(
             modifier = Modifier.fillMaxSize()
         )
     }
-
-
 }
-
-}
-
 @Preview(device = "id:pixel_5")
 @Composable
 private fun SendScreenPrev() {
