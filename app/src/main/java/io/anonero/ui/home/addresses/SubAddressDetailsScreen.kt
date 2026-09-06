@@ -172,7 +172,6 @@ fun SubAddressDetailScreen(
                                         color = MaterialTheme.colorScheme.primary,
                                     )
                                 }
-                            )
                                 Text(
                                     Formats.getDisplayAmount(subAddress.totalAmount),
                                     color = MaterialTheme.colorScheme.primary,
