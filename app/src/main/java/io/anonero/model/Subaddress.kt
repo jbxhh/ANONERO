@@ -32,10 +32,10 @@ class Subaddress(
         return if (compareAccountIndex == 0) other.addressIndex - addressIndex else compareAccountIndex
     }
 
-    val squashedAddress: String
+        val squashedAddress: String
         get() = address.substring(0, 8) + "…" + address.substring(address.length - 8)
 
-                val displayLabel: String
+        val displayLabel: String
         get() = if (label.isEmpty() || DEFAULT_LABEL_FORMATTER.matcher(label)
                 .matches() || label.startsWith("Subaddress #")
         ) "" else "$label $addressIndex"
