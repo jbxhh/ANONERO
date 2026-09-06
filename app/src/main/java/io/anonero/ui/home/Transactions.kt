@@ -572,7 +572,7 @@ fun TransactionScreen(
                                     navigateTo(CoinsScreenRoute)
                                 }
                             )
-                                 DropdownMenuItem(
+                               DropdownMenuItem(
                                 text = { Text(stringResource(R.string.refresh)) },
                                 onClick = {
                                     showMenu = false
@@ -580,6 +580,7 @@ fun TransactionScreen(
                                         view.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
                                         walletState.setLoading(true)
                                         walletState.refresh()
+                                        delay(3000)
                                         walletState.setLoading(false)
                                         refreshState.animateToHidden()
                                     }
@@ -635,28 +636,7 @@ fun TransactionScreen(
 
                 contentPadding = contentPadding
             ) {
-                stickyHeader(key = "progress") {
-                    Column {
-                        WalletProgressIndicator(
-                            refreshIndicatorProgress = refreshState.distanceFraction
-                        )
-                        AnimatedVisibility(
-                            visible = refreshState.distanceFraction > .2f && !showIndefiniteLoading,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(
-                                stringResource(R.string.pull_to_start_refresh),
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.padding(
-                                    top = 16.dp, bottom = 8.dp
-                                ),
-                                style = MaterialTheme.typography.labelSmall.copy(
-                                    fontSize = 9.sp
-                                )
-                            )
-                        };
-                    }
-                }
+                
                 item(key = "balance") {
                     Box(
                         modifier = Modifier
