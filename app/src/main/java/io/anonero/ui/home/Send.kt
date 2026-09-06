@@ -548,18 +548,9 @@ fun SendScreen(
                                                                 onValueChange = {
                                     amountField = it.trim()
                                 },
-                                trailingIcon = {
-                                    IconButton(onClick = {
-                                        showScanner = true
-                                        qrScannerParam = null
-                                    }) {
-                                        Icon(AnonIcons.Scan, contentDescription = "")
-                                    }
-                                }
-                                )
-                        },
+                            
                     )
-                    Text(
+                                        Text(
                         if (sweep)"${stringResource(R.string.sweeping_balance)} $unLockedAmount${
                             stringResource(
                                 R.string.minus_fees
@@ -575,12 +566,17 @@ fun SendScreen(
                                     ""
                                 }
                             },
-                         textAlign = TextAlign.End,
-
-                        style = MaterialTheme.typography.labelMedium.copy(
-                            letterSpacing = 0.sp
-                        )
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.labelMedium
                     )
+                    IconButton(
+                        onClick = {
+                            showScanner = true
+                            qrScannerParam = null
+                        }
+                    ) {
+                        Icon(AnonIcons.Scan, contentDescription = "")
+                    }
 
 
                     if (!txComposeError.isNullOrEmpty())
