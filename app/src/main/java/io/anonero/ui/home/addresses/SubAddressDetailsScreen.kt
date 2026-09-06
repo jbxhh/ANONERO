@@ -138,12 +138,15 @@ fun SubAddressDetailScreen(
                     }
                 },
                 title = {},
-                actions = {
+                   actions = {
                     IconButton(
                         onClick = {
                             showQR = true
                         }
                     ) {
+                        Icon(AnonIcons.QrCode, contentDescription = null)
+                    }
+                }
                         Icon(AnonIcons.QrCode, contentDescription = null)
                     }
                 }
@@ -168,13 +171,13 @@ fun SubAddressDetailScreen(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                if (addressLabel.isNotEmpty()) {
-                                    Text(
-                                        addressLabel,
-                                        modifier = Modifier.clickable {
-                                            labelDialog = true
-                                        },
-                                        color = MaterialTheme.colorScheme.primary,
+                                   Text(
+                                    addressLabel,
+                                    modifier = Modifier.clickable {
+                                        labelDialog = true
+                                    },
+                                    color = MaterialTheme.colorScheme.primary,
+                                )
                                     )
                                 }
                                 Text(
