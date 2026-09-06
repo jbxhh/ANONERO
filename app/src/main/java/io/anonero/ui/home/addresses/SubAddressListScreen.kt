@@ -122,9 +122,11 @@ fun SubAddressesScreen(
                                 Text(
                                     address.displayLabel, color = MaterialTheme.colorScheme.primary,
                                 )
-                                Text(
-                                    Formats.getDisplayAmount(address.totalAmount),
-                                    color = MaterialTheme.colorScheme.primary,
+                                                                if (address.displayLabel.isNotEmpty()) {
+                                    Text(
+                                        address.displayLabel, color = MaterialTheme.colorScheme.primary,
+                                    )
+                                }
                                     fontWeight = FontWeight.SemiBold
                                 )
                             }
