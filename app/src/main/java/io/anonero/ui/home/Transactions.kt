@@ -618,7 +618,6 @@ fun TransactionScreen(
             )
 
         }
-    // 改后（粘贴）：
     ) { contentPadding ->
         PullToRefreshBox(
             isRefreshing = showIndefiniteLoading,
