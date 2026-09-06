@@ -389,7 +389,7 @@ class Wallet {
         return subaddress
     }
     fun addSubaddress(accountIndex: Int, label: String?) {
-        mockSubLabels[mockSubCount] = label ?: "Subaddress #$mockSubCount"
+        mockSubLabels[mockSubCount] = label ?: "Subaddress$mockSubCount"
         mockSubCount++
     }
     private fun getLastSubaddress(accountIndex: Int): String {
