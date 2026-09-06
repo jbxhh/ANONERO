@@ -100,10 +100,10 @@ fun ReceiveScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top,
             ) {
-                                item {
-                    if (!nextAddress!!.label.isNullOrEmpty()) {
+                      item {
+                      if (nextAddress!!.displayLabel.isNotEmpty()) {
                         Text(
-                            text = "${nextAddress!!.label} ${nextAddress!!.addressIndex}",
+                            text = nextAddress!!.displayLabel,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .fillMaxWidth()
