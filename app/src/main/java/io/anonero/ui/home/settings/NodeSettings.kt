@@ -513,7 +513,7 @@ fun NodeListItem(
         supportingContent = {
             if (active)
                 Text(
-                    "区块高度 : ${daemonStatus?.daemonHeight?.toString() ?: ""} ",
+                    "区块高度:${daemonStatus?.daemonHeight?.toString() ?: ""} ",
                     style = MaterialTheme
                         .typography.bodySmall,
                     modifier = Modifier.padding(top = 4.dp)
