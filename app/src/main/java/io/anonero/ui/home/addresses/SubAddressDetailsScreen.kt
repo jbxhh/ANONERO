@@ -168,8 +168,8 @@ fun SubAddressDetailScreen(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                   Text(
-                                    addressLabel,
+                                Text(
+                                    addressLabel.ifEmpty { "添加标签" },
                                     modifier = Modifier.clickable {
                                         labelDialog = true
                                     },
