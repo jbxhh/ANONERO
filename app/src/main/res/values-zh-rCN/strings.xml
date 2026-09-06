@@ -44,7 +44,7 @@
     <string name="confirm">确认</string>
     <string name="spend">确认</string>
     <string name="coins">未花费输出</string>
-    <string name="output_number">输出 %1$d</string>
+    <string name="output_number">输出%1$d</string>
     <string name="battery_optimization_title">电池优化</string>
     <string name="enable">开启</string>
     <string name="cancel">取消</string>
