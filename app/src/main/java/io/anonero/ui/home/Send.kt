@@ -331,7 +331,7 @@ fun SendScreen(
         }
     }
 
-        fun prepare() {
+            fun prepare() {
         scope.launch {
             try {
                 preparingTx = true
