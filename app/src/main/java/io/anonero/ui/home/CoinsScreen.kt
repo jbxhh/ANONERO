@@ -168,17 +168,20 @@ fun CoinsScreen(
                             selectCoin(coin)
                         },
                     headlineContent = {
-                        Row(
-                            horizontalArrangement = Arrangement.SpaceBetween,
+                                                Row(
+                            verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(
-                                stringResource(R.string.output_number, index + 1), color = MaterialTheme.colorScheme.primary,
+                                stringResource(R.string.output_number, index + 1),
+                                color = MaterialTheme.colorScheme.primary,
                             )
                             Text(
                                 Formats.getDisplayAmount(coin.amount),
                                 color = MaterialTheme.colorScheme.primary,
-                                fontWeight = FontWeight.SemiBold
+                                fontWeight = FontWeight.SemiBold,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.weight(1f)
                             )
                         }
                     },
