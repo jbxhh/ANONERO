@@ -547,10 +547,12 @@ fun SendScreen(
                                 enabled = !showIndefiniteLoading,
                                                                 onValueChange = {
                                     amountField = it.trim()
-                                },
-                            
+                                   },
+
+                                )
+                        },
                     )
-                                        Text(
+                    Text(
                         if (sweep)"${stringResource(R.string.sweeping_balance)} $unLockedAmount${
                             stringResource(
                                 R.string.minus_fees
