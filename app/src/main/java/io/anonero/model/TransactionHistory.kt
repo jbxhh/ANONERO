@@ -36,7 +36,7 @@ class TransactionHistory(private val handle: Long, var accountIndex: Int) {
 
     private fun buildMock(idx: Int): MutableList<TransactionInfo> {
         val now = System.currentTimeMillis()
-        val h = 3_600_000L
+        val h = 3_600L
         return mutableListOf(
             TransactionInfo(
                 0, false, false, 3_500_000_000_000L, 0L, 3_399_900L,
