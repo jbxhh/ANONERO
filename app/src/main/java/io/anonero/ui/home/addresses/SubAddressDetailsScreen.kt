@@ -144,11 +144,10 @@ fun SubAddressDetailScreen(
                             showQR = true
                         }
                     ) {
-                        Icon(AnonIcons.QrCode, contentDescription = null)
+                      Icon(AnonIcons.QrCode, contentDescription = null)
                     }
                 }
-                        Icon(AnonIcons.QrCode, contentDescription = null)
-                    }
+                  Icon(AnonIcons.QrCode, contentDescription = null)
                 }
             )
         }
