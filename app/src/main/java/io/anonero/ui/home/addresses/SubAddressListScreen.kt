@@ -115,18 +115,18 @@ fun SubAddressesScreen(
                                 navigateToDetails(address)
                             },
                         headlineContent = {
-                            Row(
+                                                   Row(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                Text(
-                                    address.displayLabel, color = MaterialTheme.colorScheme.primary,
-                                )
-                                                                if (address.displayLabel.isNotEmpty()) {
+                                if (address.displayLabel.isNotEmpty()) {
                                     Text(
                                         address.displayLabel, color = MaterialTheme.colorScheme.primary,
                                     )
                                 }
+                                Text(
+                                    Formats.getDisplayAmount(address.totalAmount),
+                                    color = MaterialTheme.colorScheme.primary,
                                     fontWeight = FontWeight.SemiBold
                                 )
                             }
