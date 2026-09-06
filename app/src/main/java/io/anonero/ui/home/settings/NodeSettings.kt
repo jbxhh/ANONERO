@@ -284,6 +284,7 @@ fun NodeSettings(onBackPress: () -> Unit = {}) {
     val activeNode by nodeSettingsVM.activeNode.collectAsState(null)
     val scope = rememberCoroutineScope()
     val toastState = rememberToasterState()
+    val resyncMsg = stringResource(R.string.resync_initiated_this_may_take_a_while)
 
     if (showNodeDetails)
         Dialog(
@@ -390,7 +391,7 @@ fun NodeSettings(onBackPress: () -> Unit = {}) {
                                         } else {
                                             scope.launch {
                                                 toastState.show(
-                                                    "Resync initiated… this may take a while.",
+                                                         resyncMsg,
                                                     type = ToastType.Success,
                                                 )
                                             }
