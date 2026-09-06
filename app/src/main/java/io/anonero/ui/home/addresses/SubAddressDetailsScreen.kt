@@ -144,10 +144,8 @@ fun SubAddressDetailScreen(
                             showQR = true
                         }
                     ) {
-                      Icon(AnonIcons.QrCode, contentDescription = null)
-                    }
-                }
-                  Icon(AnonIcons.QrCode, contentDescription = null)
+                   Icon(AnonIcons.QrCode, contentDescription = null)
+                  }
                 }
             )
         }
@@ -177,8 +175,6 @@ fun SubAddressDetailScreen(
                                     },
                                     color = MaterialTheme.colorScheme.primary,
                                 )
-                                    )
-                                }
                                 Text(
                                     Formats.getDisplayAmount(subAddress.totalAmount),
                                     color = MaterialTheme.colorScheme.primary,
