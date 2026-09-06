@@ -626,7 +626,8 @@ fun TransactionScreen(
                 scope.launch {
                     view.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
                     walletState.setLoading(true)
-                    walletState.refresh()
+                    walletState.refresh() 
+                    delay(2000)
                     walletState.setLoading(false)
                     refreshState.animateToHidden()
                 }
