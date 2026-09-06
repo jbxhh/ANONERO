@@ -733,7 +733,6 @@ fun SendScreen(
 }
 
 }
-}
 
 @Preview(device = "id:pixel_5")
 @Composable
