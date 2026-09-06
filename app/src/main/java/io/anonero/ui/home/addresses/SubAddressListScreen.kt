@@ -25,6 +25,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -38,6 +41,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.anonero.model.Subaddress
 import io.anonero.services.WalletState
+import io.anonero.ui.components.SubAddressLabelDialog
 import io.anonero.util.Formats
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -57,6 +61,12 @@ class SubAddressListViewModel : ViewModel() {
         }
     }
 
+    fun updateAddressLabel(label: String, addressIndex: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            walletState.updateAddressLabel(label, addressIndex)
+        }
+    }
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
@@ -73,6 +83,7 @@ fun SubAddressesScreen(
     }
     val vm = viewModel<SubAddressListViewModel>()
     val addresses by vm.subAddresses.observeAsState(listOf())
+    var editingAddress by remember { mutableStateOf<Subaddress?>(null) }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -115,15 +126,17 @@ fun SubAddressesScreen(
                                 navigateToDetails(address)
                             },
                         headlineContent = {
-                                                   Row(
+                            Row(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                if (address.displayLabel.isNotEmpty()) {
-                                    Text(
-                                        address.displayLabel, color = MaterialTheme.colorScheme.primary,
-                                    )
-                                }
+                                Text(
+                                    address.displayLabel.ifEmpty { "添加标签" },
+                                    color = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.clickable {
+                                        editingAddress = address
+                                    }
+                                )
                                 Text(
                                     Formats.getDisplayAmount(address.totalAmount),
                                     color = MaterialTheme.colorScheme.primary,
@@ -145,6 +158,17 @@ fun SubAddressesScreen(
                 }
             }
         }
+    }
+
+    editingAddress?.let { addr ->
+        SubAddressLabelDialog(
+            label = addr.displayLabel,
+            onSave = { label ->
+                vm.updateAddressLabel(label, addr.addressIndex)
+                editingAddress = null
+            },
+            onCancel = { editingAddress = null }
+        )
     }
 }
 
