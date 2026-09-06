@@ -575,8 +575,10 @@ fun SendScreen(
                                     ""
                                 }
                             },
-                        textAlign = TextAlign.End,
-                        style = MaterialTheme.typography.labelMedium
+                      textAlign = TextAlign.End,
+                        style = MaterialTheme.typography.labelMedium.copy(
+                            letterSpacing = 0.sp
+                        )
                     )
 
 
