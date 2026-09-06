@@ -545,46 +545,40 @@ fun SendScreen(
                                     keyboardType = KeyboardType.Number
                                 ),
                                 enabled = !showIndefiniteLoading,
-                                onValueChange = {
+                                                                onValueChange = {
                                     amountField = it.trim()
                                 },
-
+                                trailingIcon = {
+                                    IconButton(onClick = {
+                                        showScanner = true
+                                        qrScannerParam = null
+                                    }) {
+                                        Icon(AnonIcons.Scan, contentDescription = "")
+                                    }
+                                }
                                 )
                         },
                     )
-                                        Row(
+                    Text(
+                        if (sweep) "${stringResource(R.string.sweeping_balance)} $unLockedAmount ${
+                            stringResource(
+                                R.string.minus_fees
+                            )}" else "${stringResource(R.string.available_balance)}$unLockedAmount",
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(end = 8.dp),
-                        horizontalArrangement = Arrangement.End,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            if (sweep) "${stringResource(R.string.sweeping_balance)} $unLockedAmount ${
-                                stringResource(
-                                    R.string.minus_fees
-                                )}" else "${stringResource(R.string.available_balance)}$unLockedAmount",
-                            modifier = Modifier
-                                .clickable {
-                                    amountField = if (!sweep) {
-                                        sendViewModel.setSpendType(SpendType.SWEEP)
-                                        unLockedAmount
-                                    } else {
-                                        sendViewModel.setSpendType(SpendType.NORMAL)
-                                        ""
-                                    }
-                                },
-                            style = MaterialTheme.typography.labelMedium
-                        )
-                        IconButton(
-                            onClick = {
-                                showScanner = true
-                                qrScannerParam = null
-                            }
-                        ) {
-                            Icon(AnonIcons.Scan, contentDescription = "")
-                        }
-                    }
+                            .clickable {
+                                amountField = if (!sweep) {
+                                    sendViewModel.setSpendType(SpendType.SWEEP)
+                                    unLockedAmount
+                                } else {
+                                    sendViewModel.setSpendType(SpendType.NORMAL)
+                                    ""
+                                }
+                            },
+                        textAlign = TextAlign.End,
+                        style = MaterialTheme.typography.labelMedium
+                    )
+
 
                     if (!txComposeError.isNullOrEmpty())
                         Text(
