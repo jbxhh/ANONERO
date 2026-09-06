@@ -545,9 +545,9 @@ fun SendScreen(
                                     keyboardType = KeyboardType.Number
                                 ),
                                 enabled = !showIndefiniteLoading,
-                                                                onValueChange = {
-                                    amountField = it.trim()
-                                   },
+                                onValueChange = {
+                                amountField = it.trim()
+                                },
 
                                 )
                         },
