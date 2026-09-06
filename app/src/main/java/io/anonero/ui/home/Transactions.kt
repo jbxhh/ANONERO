@@ -620,7 +620,7 @@ fun TransactionScreen(
 
         }
     ) { contentPadding ->
-        PullToRefreshBox(
+                PullToRefreshBox(
             isRefreshing = showIndefiniteLoading,
             onRefresh = {
                 scope.launch {
@@ -630,13 +630,18 @@ fun TransactionScreen(
                     walletState.setLoading(false)
                     refreshState.animateToHidden()
                 }
-            }
+            },
+            indicator = { _, _ -> }
         ) {
-            LazyColumn(
+                        LazyColumn(
 
                 contentPadding = contentPadding
             ) {
-                
+                stickyHeader(key = "progress") {
+                    WalletProgressIndicator(
+                        refreshIndicatorProgress = refreshState.distanceFraction
+                    )
+                }
                 item(key = "balance") {
                     Box(
                         modifier = Modifier
