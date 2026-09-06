@@ -146,7 +146,7 @@ class NodeSettingsViewModel(
     fun validate(rpcUrl: String, rpcUsername: String, rpcPassPhrase: String): Node? {
         uriValidationError.postValue(null)
         if( rpcUrl.isBlank()) {
-            uriValidationError.postValue("URL cannot be empty")
+            uriValidationError.postValue("节点地址不能为空")
             return null
         }
         try {
@@ -162,7 +162,7 @@ class NodeSettingsViewModel(
             }
             val validatedUrl = urlForParsing.toUri()
             if (validatedUrl.host == null) {
-                uriValidationError.postValue("Invalid Url")
+                uriValidationError.postValue("无效节点地址")
                 return null
             }
             val nodeJson = JSONObject()
@@ -690,7 +690,7 @@ fun NodeForm(
             ) {
                 if (connectionError != null)
                     Text(
-                        "Error connecting to server :$connectionError",
+                        "连接服务器时出错",
                         modifier = Modifier.padding(
                             vertical = 12.dp,
                             horizontal = 8.dp
