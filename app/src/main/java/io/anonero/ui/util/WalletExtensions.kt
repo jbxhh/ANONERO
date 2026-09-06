@@ -22,7 +22,7 @@ fun Wallet.getLatestSubAddress(): Subaddress {
     val address = this.getSubaddressObject(lastUsedSubAddress + 1)
     //if label is empty add new subaddress
     if (address.label.isEmpty()) {
-        this.addSubaddress(getAccountIndex(), "Subaddress #${address.addressIndex}")
+        this.addSubaddress(getAccountIndex(), "Subaddress${address.addressIndex}")
         this.store()
     }
     return address
