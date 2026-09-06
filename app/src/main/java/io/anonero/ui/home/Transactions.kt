@@ -45,7 +45,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
-import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -632,7 +631,7 @@ fun TransactionScreen(
                     refreshState.animateToHidden()
                 }
             },
-          indicator = { _: PullToRefreshState, _: Boolean -> }
+                    indicator = { }
         ) {
                         LazyColumn(
 
