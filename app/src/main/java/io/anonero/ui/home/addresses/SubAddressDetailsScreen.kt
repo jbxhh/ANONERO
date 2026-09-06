@@ -163,12 +163,15 @@ fun SubAddressDetailScreen(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                Text(
-                                    addressLabel,
-                                    modifier = Modifier.clickable {
-                                        labelDialog = true
-                                    },
-                                    color = MaterialTheme.colorScheme.primary,
+                                if (addressLabel.isNotEmpty()) {
+                                    Text(
+                                        addressLabel,
+                                        modifier = Modifier.clickable {
+                                            labelDialog = true
+                                        },
+                                        color = MaterialTheme.colorScheme.primary,
+                                    )
+                                }
                                 )
                                 Text(
                                     Formats.getDisplayAmount(subAddress.totalAmount),
