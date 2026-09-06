@@ -80,7 +80,12 @@ fun SubAddressDetailScreen(
         SubAddressDetail(subAddress)
     }
     val transactions by subAddressDetailVm.transactions.observeAsState(listOf())
-    var addressLabel by remember { mutableStateOf(subAddress.displayLabel) }
+        var addressLabel by remember {
+        mutableStateOf(
+            if (subAddress.label.isEmpty() || subAddress.label.startsWith("Subaddress #"))
+                "" else subAddress.displayLabel
+        )
+    }
     BackHandler {
         onBackPress()
     }
