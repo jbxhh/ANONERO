@@ -44,7 +44,7 @@
     <string name="confirm">Confirm</string>
     <string name="spend">Spend</string>
     <string name="coins">Coins</string>
-    <string name="output_number">OUTPUT %1$d</string>
+    <string name="output_number">OUTPUT%1$d</string>
     <string name="battery_optimization_title">Battery Optimization</string>
     <string name="enable">Enable</string>
     <string name="cancel">Cancel</string>
