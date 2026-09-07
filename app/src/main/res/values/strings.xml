@@ -4,6 +4,7 @@
     <!---->
      <string name="hint_optional">(Optional)</string>
      <string name="disconnect">Disconnect</string>
+     <string name="edit">Edit</string>
      <string name="remove">Remove</string>
      <string name="polyseed_mnemonic">POLYSEED MNEMONIC</string>
     <string name="next">NEXT</string>
