@@ -620,28 +620,49 @@ fun TransactionScreen(
 
         }
     ) { contentPadding ->
-                PullToRefreshBox(
-            isRefreshing = showIndefiniteLoading,
+        PullToRefreshBox(
+            isRefreshing = false,
+            state = refreshState,
+            modifier = Modifier
+                .hazeSource(
+                    state = hazeState,
+                ),
             onRefresh = {
                 scope.launch {
                     view.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
                     walletState.setLoading(true)
-                    walletState.refresh() 
+                    walletState.refresh()
                     delay(2000)
                     walletState.setLoading(false)
                     refreshState.animateToHidden()
                 }
             },
-                    indicator = { }
+            indicator = { }
         ) {
-                        LazyColumn(
-
+            LazyColumn(
                 contentPadding = contentPadding
             ) {
                 stickyHeader(key = "progress") {
-                    WalletProgressIndicator(
-                        refreshIndicatorProgress = refreshState.distanceFraction
-                    )
+                    Column {
+                        WalletProgressIndicator(
+                            refreshIndicatorProgress = refreshState.distanceFraction
+                        )
+                        AnimatedVisibility(
+                            visible = refreshState.distanceFraction > .2f && !showIndefiniteLoading,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(
+                                "拉动开始刷新",
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.padding(
+                                    top = 16.dp, bottom = 8.dp
+                                ),
+                                style = MaterialTheme.typography.labelSmall.copy(
+                                    fontSize = 9.sp
+                                )
+                            )
+                        };
+                    }
                 }
                 item(key = "balance") {
                     Box(
