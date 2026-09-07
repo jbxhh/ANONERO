@@ -741,8 +741,8 @@ fun NodeForm(
             }
         }
     }
-}
-
+}   
+    }
 @Preview(device = "id:pixel_5")
 @Composable
 private fun SeedSettingsPre() {
