@@ -30,6 +30,7 @@
     <string name="username">用户名</string>
     <string name="optional">(可选)</string>
     <string name="password">密码</string>
+    <string name="edit">编辑</string>
     <string name="wallet_loading">钱包加载中请稍候...</string>
     <string name="manual_proxy">手动代理</string>
     <string name="on">开启</string>
