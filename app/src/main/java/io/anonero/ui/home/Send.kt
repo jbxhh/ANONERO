@@ -571,7 +571,7 @@ fun SendScreen(
                                 }
                             },
                         textAlign = TextAlign.Center,
-                        Style = MaterialTheme.typography.bodyLarge.copy(letterSpacing = 0.sp, fontFamily = FontFamily.Default), 
+                        style = MaterialTheme.typography.bodyLarge.copy(letterSpacing = 0.sp, fontFamily = FontFamily.Default), 
                     )
                         IconButton(
                         modifier = Modifier.align(Alignment.CenterHorizontally),
