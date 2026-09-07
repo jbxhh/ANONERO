@@ -1,6 +1,7 @@
 package io.anonero.ui.home
 import androidx.compose.ui.unit.sp
 import AnonOutlineButton
+import androidx.compose.ui.text.font.FontFamily
 import android.os.Build
 import android.util.Log
 import android.view.HapticFeedbackConstants
@@ -533,7 +534,7 @@ fun SendScreen(
                             OutlinedTextField(
                                 value = amountField,
                                 shape = MaterialTheme.shapes.medium,
-                                textStyle = MaterialTheme.typography.bodyLarge.copy(letterSpacing = 0.sp),
+                                textStyle = MaterialTheme.typography.bodyLarge.copy(letterSpacing = 0.sp, fontFamily = FontFamily.Default),
                                 placeholder = {
                                     Text(
                                         text = "",
@@ -570,7 +571,7 @@ fun SendScreen(
                                 }
                             },
                         textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.labelMedium.copy(letterSpacing = 0.sp)
+                        textStyle = MaterialTheme.typography.bodyLarge.copy(letterSpacing = 0.sp, fontFamily = FontFamily.Default), 
                     )
                         IconButton(
                         modifier = Modifier.align(Alignment.CenterHorizontally),
