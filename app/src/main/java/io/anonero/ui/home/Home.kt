@@ -73,6 +73,7 @@ import io.anonero.ui.onboard.graph.LandingScreenRoute
 import io.anonero.util.isIgnoringBatteryOptimizations
 import org.koin.compose.koinInject
 import io.anonero.services.WalletState
+import io.anonero.AnonConfig
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @SuppressLint("BatteryLife")
@@ -86,6 +87,9 @@ fun HomeScreenComposable(modifier: Modifier = Modifier, mainNavController: NavHo
     val currentRoute = navBackStackEntry?.destination?.route ?: TransactionsRoute
     var showBatteryManagerDialog by remember { mutableStateOf(false) }
     val walletState = koinInject<WalletState>()
+
+    // SharedPreferences for storing which wallet we've already shown prompts for
+    val prefs = context.getSharedPreferences("anonero_prefs", android.content.Context.MODE_PRIVATE)
 
     val startDestination: Any = TransactionsRoute
     
@@ -114,8 +118,15 @@ fun HomeScreenComposable(modifier: Modifier = Modifier, mainNavController: NavHo
         }
     }
 
+    // Determine current wallet identifier (file name). If none, use empty string.
+    val walletFile = AnonConfig.getDefaultWalletFile(context)
+    val walletId = walletFile?.name ?: ""
+
+    // We will store a single key indicating which wallet we already prompted for: "prompts_shown_wallet_id"
     LaunchedEffect(true) {
-        if (!context.isIgnoringBatteryOptimizations()) {
+        val promptedWalletId = prefs.getString("prompts_shown_wallet_id", "") ?: ""
+        // Only show prompt if this wallet hasn't been prompted before and it's not ignoring battery optimizations
+        if (walletId.isNotEmpty() && promptedWalletId != walletId && !context.isIgnoringBatteryOptimizations()) {
             showBatteryManagerDialog = true
         }
     }
@@ -123,19 +134,23 @@ fun HomeScreenComposable(modifier: Modifier = Modifier, mainNavController: NavHo
     if (showBatteryManagerDialog) {
         AlertDialog(
             onDismissRequest = {
+                // mark this wallet as prompted so we won't prompt again for same wallet
+                prefs.edit().putString("prompts_shown_wallet_id", walletId).apply()
                 showBatteryManagerDialog = false
             },
             title = {
                 Text(stringResource(R.string.battery_optimization_title))
             },
             text = {
-                                Text(
+                Text(
                     "为了让钱包在后台正常运行，建议关闭电池优化。你随时可以在应用设置中更改此项。是否现在前往设置？"
                 )
             },
             confirmButton = {
                 TextButton(
                     onClick = {
+                        // mark as prompted
+                        prefs.edit().putString("prompts_shown_wallet_id", walletId).apply()
                         val intent = Intent()
                         intent.action = ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
                         intent.data = "package:${context.packageName}".toUri()
@@ -149,6 +164,8 @@ fun HomeScreenComposable(modifier: Modifier = Modifier, mainNavController: NavHo
             dismissButton = {
                 TextButton(
                     onClick = {
+                        // mark as prompted
+                        prefs.edit().putString("prompts_shown_wallet_id", walletId).apply()
                         showBatteryManagerDialog = false
                     }
                 ) {
