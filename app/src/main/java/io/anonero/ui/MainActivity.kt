@@ -5,6 +5,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Process
@@ -66,6 +67,9 @@ class MainActivity : ComponentActivity() {
     private val walletState: WalletState by inject()
     private val torService: TorService by inject()
     val anonPrefs: SharedPreferences by inject(named(WALLET_PREFERENCES))
+
+    // Local prefs to record which wallet we've already prompted notification permission for
+    private val localPrefs by lazy { getSharedPreferences("anonero_prefs", MODE_PRIVATE) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashscreen = installSplashScreen()
@@ -150,6 +154,12 @@ class MainActivity : ComponentActivity() {
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
+        // Mark that we've prompted for this wallet
+        val walletId = AnonConfig.getDefaultWalletFile(this)?.name ?: ""
+        if (walletId.isNotEmpty()) {
+            localPrefs.edit().putString("notif_prompt_wallet_id", walletId).apply()
+        }
+
         if (isGranted) {
             Intent(applicationContext, AnonNeroService::class.java).also {
                 it.action = "start"
@@ -160,16 +170,47 @@ class MainActivity : ComponentActivity() {
     }
 
     fun startNotificationService() {
-        if (ContextCompat.checkSelfPermission(
-                this, Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
+        val walletId = AnonConfig.getDefaultWalletFile(this)?.name ?: ""
+        if (walletId.isEmpty()) {
+            // No wallet file; nothing to prompt for
+            return
+        }
+
+        // If already have permission, just start service
+        val hasPermission = ContextCompat.checkSelfPermission(
+            this, Manifest.permission.POST_NOTIFICATIONS
+        ) == PackageManager.PERMISSION_GRANTED
+        if (hasPermission) {
+            startAnonService(applicationContext)
+            return
+        }
+
+        // Check whether we've already prompted for this wallet
+        val promptedWalletId = localPrefs.getString("notif_prompt_wallet_id", "") ?: ""
+        if (promptedWalletId != walletId) {
+            // Not prompted for this wallet yet — request runtime permission (Android 13+)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            } else {
+                // Pre-Android 13 no runtime permission needed — start service and mark
+                startAnonService(applicationContext)
+                localPrefs.edit().putString("notif_prompt_wallet_id", walletId).apply()
             }
-        } else {
-            startAnonService(applicationContext)
+            return
         }
+
+        // Already prompted for this wallet and still no permission — don't re-request system dialog.
+        // Show explanation and guide user to app settings.
+        android.app.AlertDialog.Builder(this)
+            .setTitle(getString(R.string.enable_notifications_title))
+            .setMessage(getString(R.string.enable_notifications_explain))
+            .setPositiveButton(getString(R.string.go_to_settings)) { _, _ ->
+                val intent = Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                intent.data = Uri.parse("package:$packageName")
+                startActivity(intent)
+            }
+            .setNegativeButton(getString(R.string.cancel), null)
+            .show()
     }
 
     fun stopNotificationService() {
