@@ -533,6 +533,7 @@ fun SendScreen(
                             OutlinedTextField(
                                 value = amountField,
                                 shape = MaterialTheme.shapes.medium,
+                                textStyle = MaterialTheme.typography.bodyLarge.copy(letterSpacing = 0.sp),
                                 placeholder = {
                                     Text(
                                         text = "",
