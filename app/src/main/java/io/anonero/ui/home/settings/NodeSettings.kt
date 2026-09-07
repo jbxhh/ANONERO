@@ -31,6 +31,7 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -487,6 +488,10 @@ fun NodeListItem(
     onRemove: (node: Node) -> Unit = {},
 ) {
     var menu by remember { mutableStateOf(false) }
+    var editing by remember { mutableStateOf(false) }
+    var editHost by remember { mutableStateOf("") }
+    var editUser by remember { mutableStateOf("") }
+    var editPass by remember { mutableStateOf("") }
     val daemonStatus by nodeSettingsVM.getCurrentDaemonLive().observeAsState(null)
 
     ListItem(
@@ -550,11 +555,18 @@ fun NodeListItem(
                     DropdownMenuItem(
                        text = { Text(if (active) stringResource(R.string.disconnect) else stringResource(R.string.connect)) },
                         onClick = {
-                            if (active) onDisconnect(node) else onConnect(node)
-                            menu = false
-                        },
-                    )
-                    if (!active) {
+                       if (!active) {
+                        HorizontalDivider()
+                        DropdownMenuItem(
+                            text = { Text(stringResource(R.string.edit)) },
+                            onClick = {
+                                editHost = node.toNodeString()
+                                editUser = node.username
+                                editPass = node.password
+                                editing = true
+                                menu = false
+                            },
+                        )
                         HorizontalDivider()
                         DropdownMenuItem(
                             text = { Text(stringResource(R.string.remove)) },
