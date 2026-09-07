@@ -1,80 +1,123 @@
-  - name: Set ANDROID_SDK_ROOT
-    run: echo "ANDROID_SDK_ROOT=$RUNNER_TEMP/android-sdk" >> $GITHUB_ENV
+name: Build ANON APK
 
-  - name: Set up JDK 17
-    uses: actions/setup-java@v4
-    with:
-      distribution: temurin
-      java-version: ${{ env.JAVA_VERSION }}
+"on":
+  push:
+    branches: [ main ]
+  workflow_dispatch:
 
-  - name: Cache Gradle
-    uses: actions/cache@v4
-    with:
-      path: |
-        ~/.gradle/caches
-        ~/.gradle/wrapper
-      key: ${{ runner.os }}-gradle-${{ hashFiles('**/gradle-wrapper.properties', '**/settings.gradle*', '**/build.gradle*') }}
-      restore-keys: |
-        ${{ runner.os }}-gradle-
+env:
+  JAVA_VERSION: '17'
 
-  - name: Install Android SDK, NDK and CMake
-    uses: android-actions/setup-sdk@v2
-    with:
-      api-level: 35
-      build-tools: 36.0.0
-      ndk: ${{ matrix.ndk }}
-      cmake: '3.22.1'
-      cache: true
+jobs:
+  build:
+    name: Build APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
 
-  - name: Grant execute permission for gradlew
-    run: chmod +x ./gradlew
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-  - name: Print environment
-    run: |
-      echo "NDK version: ${{ matrix.ndk }}"
-      java -version
-      uname -a
-      ./gradlew -v
+      - name: Set ANDROID_SDK_ROOT
+        run: echo "ANDROID_SDK_ROOT=$RUNNER_TEMP/android-sdk" >> $GITHUB_ENV
 
-  - name: Build (try fast, then retry with refresh-dependencies)
-    id: build-step
-    run: |
-      set -o pipefail
-      echo "Attempt 1: normal build"
-      if ./gradlew clean assembleDebug --no-daemon --stacktrace; then
-        echo "BUILD_STATUS=success" >> $GITHUB_OUTPUT
-        exit 0
-      fi
-      echo "Attempt 1 failed, retrying with --refresh-dependencies"
-      if ./gradlew clean assembleDebug --no-daemon --refresh-dependencies --stacktrace; then
-        echo "BUILD_STATUS=success" >> $GITHUB_OUTPUT
-        exit 0
-      fi
-      echo "Both attempts failed" >&2
-      echo "BUILD_STATUS=failure" >> $GITHUB_OUTPUT
-      exit 1
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
 
-  - name: Upload APK artifact (on success)
-    if: steps.build-step.outputs.BUILD_STATUS == 'success'
-    uses: actions/upload-artifact@v4
-    with:
-      name: app-debug-apk-ndk-${{ matrix.ndk }}
-      path: app/build/outputs/apk/**/app-*-debug.apk
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/gradle-wrapper.properties', '**/settings.gradle*', '**/build.gradle*', '**/libs.versions.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
-  - name: Collect build logs (on failure)
-    if: failure()
-    run: |
-      mkdir -p build_logs
-      echo "Saving gradle build output to build_logs/gradle_build.log"
-      ./gradlew assembleDebug --no-daemon --stacktrace > build_logs/gradle_build.log 2>&1 || true
-      echo "Collecting system info"
-      uname -a > build_logs/uname.txt || true
-      java -version > build_logs/java_version.txt 2>&1 || true
-      echo "NDK used: ${{ matrix.ndk }}" > build_logs/ndk.txt || true
+      - name: Install Android SDK
+        uses: android-actions/setup-sdk@v2
+        with:
+          api-level: 35
+          build-tools: 36.0.0
+          cache: true
 
-  - name: Upload build logs (on failure)
-    if: failure()
-    uses: actions/upload-artifact@v4
-    with:
-      name: build-logs-ndk-${{ matrix.ndk }}
-      path: build_logs
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+
+      - name: Print environment
+        run: |
+          java -version
+          uname -a
+          ./gradlew -v
+
+      - name: Build APK (auto-retry up to 3 times)
+        id: build
+        run: |
+          set +e
+          ATTEMPT=1
+          MAX_ATTEMPTS=3
+          while [ $ATTEMPT -le $MAX_ATTEMPTS ]; do
+            echo "========================================"
+            echo "Build attempt $ATTEMPT / $MAX_ATTEMPTS"
+            echo "========================================"
+            if [ $ATTEMPT -eq 2 ]; then
+              echo "Using --refresh-dependencies for this attempt"
+              ./gradlew :app:assembleAnonDebug --no-daemon --refresh-dependencies --stacktrace
+            else
+              ./gradlew :app:assembleAnonDebug --no-daemon --stacktrace
+            fi
+            RESULT=$?
+            if [ $RESULT -eq 0 ]; then
+              echo "BUILD_STATUS=success" >> $GITHUB_OUTPUT
+              echo "Build succeeded on attempt $ATTEMPT"
+              exit 0
+            fi
+            echo "Attempt $ATTEMPT failed with exit code $RESULT"
+            if [ $ATTEMPT -lt $MAX_ATTEMPTS ]; then
+              echo "Waiting 20 seconds before retry..."
+              sleep 20
+            fi
+            ATTEMPT=$((ATTEMPT + 1))
+          done
+          echo "All $MAX_ATTEMPTS build attempts failed"
+          echo "BUILD_STATUS=failure" >> $GITHUB_OUTPUT
+          exit 1
+
+      - name: Find APK files
+        if: steps.build.outputs.BUILD_STATUS == 'success'
+        run: |
+          echo "APK output directory:"
+          find app/build/outputs/apk -name "*.apk" -type f || echo "No APK found"
+          ls -la app/build/outputs/apk/anon/debug/ 2>/dev/null || true
+
+      - name: Upload APK artifact
+        if: steps.build.outputs.BUILD_STATUS == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ANON-APK
+          path: app/build/outputs/apk/**/*.apk
+          if-no-files-found: error
+
+      - name: Collect build logs on failure
+        if: failure()
+        run: |
+          mkdir -p build_logs
+          echo "=== Gradle build output (re-run to capture full log) ===" > build_logs/gradle_build.log
+          ./gradlew :app:assembleAnonDebug --no-daemon --stacktrace >> build_logs/gradle_build.log 2>&1 || true
+          echo "" >> build_logs/gradle_build.log
+          echo "=== System info ===" >> build_logs/gradle_build.log
+          uname -a >> build_logs/gradle_build.log 2>&1 || true
+          java -version >> build_logs/gradle_build.log 2>&1 || true
+          echo "Java home: $JAVA_HOME" >> build_logs/gradle_build.log
+          echo "Android SDK: $ANDROID_SDK_ROOT" >> build_logs/gradle_build.log
+          ls -la build_logs/
+
+      - name: Upload build logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs
+          path: build_logs
