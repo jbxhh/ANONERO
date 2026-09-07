@@ -1,4 +1,4 @@
-name: Build ANON APK
+name: Build ANON APK (full auto-fix)
 
 "on":
   push:
@@ -7,16 +7,23 @@ name: Build ANON APK
 
 env:
   JAVA_VERSION: '17'
+  MAX_FIX_ATTEMPTS: '3'
+
+permissions:
+  contents: write
 
 jobs:
   build:
-    name: Build APK
+    name: Build with full auto-fix
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set ANDROID_SDK_ROOT
         run: echo "ANDROID_SDK_ROOT=$RUNNER_TEMP/android-sdk" >> $GITHUB_ENV
@@ -47,77 +54,113 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
-      - name: Print environment
+      - name: Write simple-fix script
         run: |
-          java -version
-          uname -a
-          ./gradlew -v
+          cat > simple_fix.py << 'PYEOF'
+          import sys, re, os
 
-      - name: Build APK (auto-retry up to 3 times)
-        id: build
+          def fix_file(filepath):
+              if not os.path.isfile(filepath):
+                  return False
+              original = open(filepath, encoding='utf-8').read()
+              lines = original.split('\n')
+              changed = False
+
+              # 1. 去重连续重复的 import
+              new_lines = []
+              prev = None
+              for line in lines:
+                  s = line.strip()
+                  if s.startswith('import '):
+                      if s == prev:
+                          changed = True
+                          continue
+                      prev = s
+                  else:
+                      prev = None
+                  new_lines.append(line)
+              lines = new_lines
+
+              # 2. 删除孤立的注解（后面不是 fun/class/另一个注解/空行）
+              new_lines = []
+              i = 0
+              while i < len(lines):
+                  s = lines[i].strip()
+                  if s in ('@Composable', '@OptIn', '@Preview', '@Suppress') and i + 1 < len(lines):
+                      ns = lines[i+1].strip()
+                      if not (ns.startswith('fun ') or ns.startswith('private fun ')
+                              or ns.startswith('public fun ') or ns.startswith('class ')
+                              or ns.startswith('@') or ns == '' or ns.startswith('override ')):
+                          changed = True
+                          i += 1
+                          continue
+                  new_lines.append(lines[i])
+                  i += 1
+              lines = new_lines
+
+              # 3. 末尾括号差1个就补/删
+              text = '\n'.join(lines)
+              ob, cb = text.count('{'), text.count('}')
+              if ob - cb == 1:
+                  lines.append('}')
+                  changed = True
+              elif cb - ob == 1:
+                  for j in range(len(lines)-1, -1, -1):
+                      if lines[j].strip() == '}':
+                          del lines[j]
+                          changed = True
+                          break
+
+              # 4. 清理连续3行以上空行
+              text = '\n'.join(lines)
+              text = re.sub(r'\n{4,}', '\n\n\n', text)
+              lines = text.split('\n')
+
+              if changed:
+                  open(filepath, 'w', encoding='utf-8').write('\n'.join(lines))
+                  return True
+              return False
+
+          log = open(sys.argv[1], encoding='utf-8', errors='replace').read()
+          files = list(dict.fromkeys(re.findall(r'([a-zA-Z0-9_./-]+\.kt):\d+', log)))
+          any_fixed = False
+          for f in files[:3]:
+              if fix_file(f):
+                  print(f"  simple-fixed: {f}")
+                  any_fixed = True
+          if not any_fixed:
+              print("No simple fix applicable")
+              sys.exit(1)
+          PYEOF
+          echo "simple_fix.py ready"
+
+      - name: Write AI-fix script (Gemini)
         run: |
-          set +e
-          ATTEMPT=1
-          MAX_ATTEMPTS=3
-          while [ $ATTEMPT -le $MAX_ATTEMPTS ]; do
-            echo "========================================"
-            echo "Build attempt $ATTEMPT / $MAX_ATTEMPTS"
-            echo "========================================"
-            if [ $ATTEMPT -eq 2 ]; then
-              echo "Using --refresh-dependencies for this attempt"
-              ./gradlew :app:assembleAnonDebug --no-daemon --refresh-dependencies --stacktrace
-            else
-              ./gradlew :app:assembleAnonDebug --no-daemon --stacktrace
-            fi
-            RESULT=$?
-            if [ $RESULT -eq 0 ]; then
-              echo "BUILD_STATUS=success" >> $GITHUB_OUTPUT
-              echo "Build succeeded on attempt $ATTEMPT"
-              exit 0
-            fi
-            echo "Attempt $ATTEMPT failed with exit code $RESULT"
-            if [ $ATTEMPT -lt $MAX_ATTEMPTS ]; then
-              echo "Waiting 20 seconds before retry..."
-              sleep 20
-            fi
-            ATTEMPT=$((ATTEMPT + 1))
-          done
-          echo "All $MAX_ATTEMPTS build attempts failed"
-          echo "BUILD_STATUS=failure" >> $GITHUB_OUTPUT
-          exit 1
+          cat > ai_fix.py << 'PYEOF'
+          import sys, re, os, json, urllib.request
 
-      - name: Find APK files
-        if: steps.build.outputs.BUILD_STATUS == 'success'
-        run: |
-          echo "APK output directory:"
-          find app/build/outputs/apk -name "*.apk" -type f || echo "No APK found"
-          ls -la app/build/outputs/apk/anon/debug/ 2>/dev/null || true
+          api_key = os.environ.get("GEMINI_API_KEY", "")
+          if not api_key:
+              print("No GEMINI_API_KEY, skipping AI fix")
+              sys.exit(1)
 
-      - name: Upload APK artifact
-        if: steps.build.outputs.BUILD_STATUS == 'success'
-        uses: actions/upload-artifact@v4
-        with:
-          name: ANON-APK
-          path: app/build/outputs/apk/**/*.apk
-          if-no-files-found: error
+          log = open(sys.argv[1], encoding='utf-8', errors='replace').read()[-4000:]
+          files = list(dict.fromkeys(re.findall(r'([a-zA-Z0-9_./-]+\.kt):\d+', log)))
+          if not files:
+              print("No error file identified")
+              sys.exit(1)
 
-      - name: Collect build logs on failure
-        if: failure()
-        run: |
-          mkdir -p build_logs
-          echo "=== Gradle build output (re-run to capture full log) ===" > build_logs/gradle_build.log
-          ./gradlew :app:assembleAnonDebug --no-daemon --stacktrace >> build_logs/gradle_build.log 2>&1 || true
-          echo "" >> build_logs/gradle_build.log
-          echo "=== System info ===" >> build_logs/gradle_build.log
-          uname -a >> build_logs/gradle_build.log 2>&1 || true
-          java -version >> build_logs/gradle_build.log 2>&1 || true
-          echo "Java home: $JAVA_HOME" >> build_logs/gradle_build.log
-          echo "Android SDK: $ANDROID_SDK_ROOT" >> build_logs/gradle_build.log
-          ls -la build_logs/
+          target = files[0]
+          if not os.path.isfile(target):
+              print(f"File not found: {target}")
+              sys.exit(1)
 
-      - name: Upload build logs on failure
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-logs
-          path: build_logs
+          file_content = open(target, encoding='utf-8').read()[-8000:]
+          prompt = f"""You are an expert Kotlin/Android Jetpack Compose developer.
+The build failed with this error:
+{log}
+
+The error is in this file: {target}
+Here is the file content:
+```kotlin
+{file_content}
