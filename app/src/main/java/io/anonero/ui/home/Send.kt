@@ -533,8 +533,8 @@ fun SendScreen(
                         supportingContent = {
                             OutlinedTextField(
                                 value = amountField,
-                                shape = MaterialTheme.shapes.medium,
-                                textStyle = MaterialTheme.typography.bodyLarge.copy(letterSpacing = 0.sp, fontFamily = FontFamily.Default),
+                                shape = MaterialTheme.shapes.me
+                                textStyle = MaterialTheme.typography.bodyLarge.copy(letterSpacing = 0.sp),
                                 placeholder = {
                                     Text(
                                         text = "",
@@ -571,7 +571,7 @@ fun SendScreen(
                                 }
                             },
                         textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.bodyLarge.copy(letterSpacing = 0.sp, fontFamily = FontFamily.Default), 
+                        style = MaterialTheme.typography.labelMedium.copy(letterSpacing = 0.sp)
                     )
                         IconButton(
                         modifier = Modifier.align(Alignment.CenterHorizontally),
