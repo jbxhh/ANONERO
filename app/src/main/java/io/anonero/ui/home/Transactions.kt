@@ -575,14 +575,20 @@ fun TransactionScreen(
                                DropdownMenuItem(
                                 text = { Text(stringResource(R.string.refresh)) },
                                 onClick = {
+                                    // Trigger the pull-to-refresh indicator visually and run refresh
                                     showMenu = false
                                     scope.launch {
                                         view.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+                                        // show pull-to-refresh indicator
+                                        refreshState.snapTo(1f)
                                         walletState.setLoading(true)
-                                        walletState.refresh()
-                                        delay(3000)
-                                        walletState.setLoading(false)
-                                        refreshState.animateToHidden()
+                                        try {
+                                            walletState.refresh()
+                                        } finally {
+                                            delay(3000)
+                                            walletState.setLoading(false)
+                                            refreshState.animateToHidden()
+                                        }
                                     }
                                 }
                             )
@@ -652,7 +658,7 @@ fun TransactionScreen(
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(
-                                "拉动开始刷新",
+                                "拉��开始刷新",
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier.padding(
                                     top = 16.dp, bottom = 8.dp
