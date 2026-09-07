@@ -493,6 +493,7 @@ fun NodeListItem(
     var editUser by remember { mutableStateOf("") }
     var editPass by remember { mutableStateOf("") }
     val daemonStatus by nodeSettingsVM.getCurrentDaemonLive().observeAsState(null)
+    val connectionError by nodeSettingsVM.connectionError.observeAsState(null)
 
     ListItem(
         modifier = modifier
@@ -588,6 +589,78 @@ fun NodeListItem(
             }
         }
     )
+
+    // Edit dialog: allows user to change host, username, password and save
+    if (editing) {
+        Dialog(
+            onDismissRequest = { editing = false },
+            properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true)
+        ) {
+            Column(
+                modifier = Modifier
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(16.dp)
+                    .fillMaxWidth()
+            ) {
+                Text(text = stringResource(R.string.edit), modifier = Modifier.padding(bottom = 8.dp))
+                OutlinedTextField(
+                    value = editHost,
+                    onValueChange = { editHost = it },
+                    label = { Text(stringResource(R.string.node)) },
+                    placeholder = { Text(stringResource(R.string.onion_address_example)) },
+                    modifier = Modifier.fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
+                )
+                Spacer(Modifier.padding(6.dp))
+                OutlinedTextField(
+                    value = editUser,
+                    onValueChange = { editUser = it },
+                    label = { Text(stringResource(R.string.username)) },
+                    placeholder = { Text(stringResource(R.string.hint_optional)) },
+                    modifier = Modifier.fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
+                )
+                Spacer(Modifier.padding(6.dp))
+                OutlinedTextField(
+                    value = editPass,
+                    onValueChange = { editPass = it },
+                    label = { Text(stringResource(R.string.password)) },
+                    placeholder = { Text(stringResource(R.string.hint_optional)) },
+                    modifier = Modifier.fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
+                )
+
+                if (!connectionError.isNullOrEmpty()) {
+                    Text(
+                        text = connectionError ?: "",
+                        color = DangerColor,
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    )
+                }
+
+                Row(
+                    horizontalArrangement = Arrangement.End,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    TextButton(onClick = { editing = false }) {
+                        Text(stringResource(R.string.cancel))
+                    }
+                    TextButton(onClick = {
+                        // Validate and save
+                        val newNode = nodeSettingsVM.validate(editHost, editUser, editPass)
+                        if (newNode != null) {
+                            // remove old and add new
+                            nodeSettingsVM.removeItem(node.toNodeString())
+                            nodeSettingsVM.addItem(newNode)
+                            editing = false
+                        }
+                    }) {
+                        Text(stringResource(R.string.confirm))
+                    }
+                }
+            }
+        }
+    }
 }
 
 @Composable
