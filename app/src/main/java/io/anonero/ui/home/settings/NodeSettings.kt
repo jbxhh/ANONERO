@@ -392,7 +392,7 @@ fun NodeSettings(onBackPress: () -> Unit = {}) {
                                         } else {
                                             scope.launch {
                                                 toastState.show(
-                                                         resyncMsg,
+                                                     resyncMsg,
                                                     type = ToastType.Success,
                                                 )
                                             }
@@ -553,9 +553,17 @@ fun NodeListItem(
                     onDismissRequest = { menu = false }
                 ) {
                     DropdownMenuItem(
-                       text = { Text(if (active) stringResource(R.string.disconnect) else stringResource(R.string.connect)) },
+                        text = { Text(if (active) stringResource(R.string.disconnect) else stringResource(R.string.connect)) },
                         onClick = {
-                       if (!active) {
+                            if (active) {
+                                onDisconnect(node)
+                            } else {
+                                onConnect(node)
+                            }
+                            menu = false
+                        }
+                    )
+                    if (!active) {
                         HorizontalDivider()
                         DropdownMenuItem(
                             text = { Text(stringResource(R.string.edit)) },
@@ -605,14 +613,13 @@ fun NodeForm(
                 .weight(8f)
                 .verticalScroll(
                     rememberScrollState()
-                )
-            ,
+                ),
             verticalArrangement = Arrangement.Top,
         ) {
             ListItem(
                 headlineContent = {
                     Text(
-                                                text = stringResource(R.string.node),
+                        text = stringResource(R.string.node),
                         color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.padding(start = 4.dp)
                     )
@@ -629,7 +636,7 @@ fun NodeForm(
                         ),
                         placeholder = {
                             Text(
-                           text = stringResource(R.string.onion_address_example),
+                                text = stringResource(R.string.onion_address_example),
                                 color = labelColor
                             )
                         },
@@ -642,7 +649,7 @@ fun NodeForm(
             ListItem(
                 headlineContent = {
                     Text(
-                                                text = stringResource(R.string.username),
+                        text = stringResource(R.string.username),
                         color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.padding(start = 4.dp)
                     )
@@ -653,7 +660,7 @@ fun NodeForm(
                         shape = MaterialTheme.shapes.medium,
                         placeholder = {
                             Text(
-                         text = stringResource(R.string.hint_optional),
+                                text = stringResource(R.string.hint_optional),
                                 color = labelColor
                             )
                         },
@@ -665,7 +672,7 @@ fun NodeForm(
                             rpcUsername = it
                         },
 
-                        )
+                    )
                 },
             )
             ListItem(
@@ -688,7 +695,7 @@ fun NodeForm(
                         ),
                         placeholder = {
                             Text(
-                                 text = stringResource(R.string.hint_optional),
+                                text = stringResource(R.string.hint_optional),
                                 color = labelColor
                             )
                         },
@@ -720,8 +727,7 @@ fun NodeForm(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1.5f)
-                .padding(bottom = 8.dp)
-            ,
+                .padding(bottom = 8.dp),
             contentAlignment = Alignment.Center
         ) {
             AnonOutlineButton(
@@ -741,8 +747,8 @@ fun NodeForm(
             }
         }
     }
-}   
-    }
+}
+
 @Preview(device = "id:pixel_5")
 @Composable
 private fun SeedSettingsPre() {
