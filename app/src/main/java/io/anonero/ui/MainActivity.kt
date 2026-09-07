@@ -34,6 +34,7 @@ import androidx.lifecycle.asLiveData
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import io.anonero.AnonConfig
+import io.anonero.R
 import io.anonero.model.WalletManager
 import io.anonero.services.AnonNeroService
 import io.anonero.services.TorService
