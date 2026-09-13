@@ -719,67 +719,26 @@ fun TransactionScreen(
 @Composable
 fun TransactionItem(tx: TransactionInfo, hideAmounts: Boolean = false, modifier: Modifier = Modifier) {
     val isIncoming = tx.direction == TransactionInfo.Direction.Direction_In
-    val amount = if (isIncoming) tx.amount else tx.amount
-    val confirmations = tx.confirmations
+    val amount = tx.amount
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(
-                horizontal = 12.dp,
-                vertical = 20.dp
-            )
-            .border(
-                border = BorderStroke(
-                    1.dp,
-                    Color.Black
-                ),
-                shape = MaterialTheme.shapes.medium
-            )
-            .padding(
-                horizontal = 12.dp,
-                vertical = 12.dp
-            ),
+            .padding(horizontal = 24.dp, vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.End
     ) {
-        Box(modifier = Modifier.padding(top = 2.dp)) {
-            if (confirmations >= 10)
-                Icon(
-                    if (isIncoming) AnonIcons.ArrowDownLeft else AnonIcons.ArrowUpRight,
-                    modifier = Modifier.size(32.dp),
-                    tint = if (isIncoming) MaterialTheme.colorScheme.primary else LocalContentColor.current,
-                    contentDescription = ""
-                )
-            else
-                Box(
-                    modifier = Modifier
-                        .size(28.dp)
-                ) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(28.dp),
-                        strokeWidth = 2.dp,
-                        progress = {
-                            ((confirmations.toFloat()) / (10f))
-                        }
-                    )
-                    Text(
-                        text = "$confirmations",
-                        modifier = Modifier.align(Alignment.Center),
-                        style = MaterialTheme.typography.bodySmall.copy(
-                            fontSize = 9.sp
-                        )
-                    )
-                }
-        }
+        Icon(
+            if (isIncoming) AnonIcons.ArrowDownLeft else AnonIcons.ArrowUpRight,
+            modifier = Modifier.size(18.dp),
+            tint = if (isIncoming) MaterialTheme.colorScheme.primary else LocalContentColor.current,
+            contentDescription = null
+        )
         Text(
             if (hideAmounts) Formats.maskAmount(amount)
             else Formats.getDisplayAmount(amount),
-            textAlign = TextAlign.Center,
+            textAlign = TextAlign.End,
+            modifier = Modifier.padding(start = 10.dp),
             style = MaterialTheme.typography.titleLarge
-        )
-        Text(
-            Formats.formatTransactionTime(tx.timestamp),
-            style = MaterialTheme.typography.labelSmall
         )
     }
 }
