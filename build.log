@@ -18,60 +18,40 @@ Calculating task graph as no cached configuration is available for tasks: :app:a
 > Task :app:createAnonDebugCompatibleScreenManifests
 > Task :app:generateAnonDebugBuildConfig
 > Task :app:generateAnonDebugResValues
-> Task :app:mergeAnonDebugShaders
-> Task :app:generateAnonDebugResources
 > Task :app:javaPreCompileAnonDebug
-> Task :app:mapAnonDebugSourceSetPaths
+> Task :app:mergeAnonDebugShaders
 > Task :app:extractDeepLinksAnonDebug
+> Task :app:generateAnonDebugResources
+> Task :app:mapAnonDebugSourceSetPaths
 > Task :app:checkAnonDebugAarMetadata
 > Task :app:compileAnonDebugShaders NO-SOURCE
 > Task :app:generateAnonDebugAssets UP-TO-DATE
-> Task :app:packageAnonDebugResources
 > Task :app:mergeAnonDebugAssets
+> Task :app:packageAnonDebugResources
 > Task :app:compressAnonDebugAssets
 > Task :app:desugarAnonDebugFileDependencies
 > Task :app:processAnonDebugMainManifest
 > Task :app:processAnonDebugManifest
 > Task :app:processAnonDebugManifestForPackage
-> Task :app:parseAnonDebugLocalResources
-> Task :app:checkAnonDebugDuplicateClasses
 > Task :app:mergeAnonDebugJniLibFolders
-> Task :app:mergeAnonDebugResources
-> Task :app:mergeLibDexAnonDebug
-> Task :app:validateSigningAnonDebug
-> Task :app:writeAnonDebugAppMetadata
-> Task :app:writeAnonDebugSigningConfigVersions
+> Task :app:parseAnonDebugLocalResources
 > Task :app:mergeAnonDebugNativeLibs
+> Task :app:checkAnonDebugDuplicateClasses
+> Task :app:mergeAnonDebugResources
 
 > Task :app:stripAnonDebugDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so, libimage_processing_util_jni.so, libsurface_util_jni.so, libtor.so, libtorexec.so. Run with --info option to learn more.
 
+> Task :app:mergeLibDexAnonDebug
+> Task :app:writeAnonDebugAppMetadata
+> Task :app:writeAnonDebugSigningConfigVersions
+> Task :app:validateSigningAnonDebug
 > Task :app:processAnonDebugResources
 > Task :app:mergeExtDexAnonDebug
 
 > Task :app:compileAnonDebugKotlin
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:689:31 Unresolved reference 'Text'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:691:64 Syntax error: Expecting ')'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:691:64 Syntax error: Unexpected tokens (use ';' to separate expressions on the same line).
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:692:13 Unresolved reference 'style'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:693:30 Syntax error: Unexpected tokens (use ';' to separate expressions on the same line).
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:694:13 Unresolved reference 'maxLines'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:694:25 Syntax error: Unexpected tokens (use ';' to separate expressions on the same line).
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:695:13 'val' cannot be reassigned.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:697:38 Syntax error: Unexpected tokens (use ';' to separate expressions on the same line).
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:698:13 Unresolved reference 'textAlign'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:699:9 Syntax error: Expecting an element.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:700:25 Syntax error: Expecting an element.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:704:21 Unresolved reference 'item'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:705:21 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:707:17 Unresolved reference 'items'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:707:77 Unresolved reference 'it'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:709:25 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:710:49 Unresolved reference 'it'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:712:69 Unresolved reference 'it'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:715:59 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:716:70 Unresolved reference 'it'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:726:1 Syntax error: Expecting a top level declaration.
+e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:701:25 Syntax error: Expecting an element.
+e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:789:6 Syntax error: Expecting '}'.
 
 > Task :app:compileAnonDebugKotlin FAILED
 
@@ -336,6 +316,6 @@ Caused by: org.jetbrains.kotlin.gradle.tasks.CompilationErrorException: Compilat
 	... 2 more
 
 
-BUILD FAILED in 41s
+BUILD FAILED in 42s
 29 actionable tasks: 29 executed
 Configuration cache entry stored.
