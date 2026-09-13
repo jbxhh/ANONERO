@@ -694,16 +694,17 @@ fun TransactionScreen(
                         )
                     }
                 }
-                items(transactions.size, key = { transactions[it].getListKey() }) {
+                val visibleTransactions = transactions.drop(1)
+                items(visibleTransactions.size, key = { visibleTransactions[it].getListKey() }) {
                     with(sharedTransitionScope) {
                         TransactionItem(
-                            transactions[it], hideAmounts = hideAmounts, modifier = Modifier
+                            visibleTransactions[it], hideAmounts = hideAmounts, modifier = Modifier
                                 .clickable {
-                                    onItemClick(transactions[it])
+                                    onItemClick(visibleTransactions[it])
                                 }
                                 .sharedElement(
                                     sharedTransitionScope.rememberSharedContentState(
-                                        key = "${transactions[it].hash}",
+                                        key = "${visibleTransactions[it].hash}",
                                     ),
                                     animatedVisibilityScope = animatedContentScope
                                 )
