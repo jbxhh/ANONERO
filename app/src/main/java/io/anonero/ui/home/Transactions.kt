@@ -1,5 +1,6 @@
 package io.anonero.ui.home
-
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import AnonNeroTheme 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import android.view.HapticFeedbackConstants
