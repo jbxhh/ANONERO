@@ -702,7 +702,7 @@ fun TransactionScreen(
                 }
                val visibleTransactions = transactions.drop(1)
                     item(key = "balance_space") {
-                    Spacer(Modifier.height(60.dp)
+                    Spacer(Modifier.height(60.dp))
                 }
                 items(visibleTransactions.size, key = { visibleTransactions[it].getListKey() }) {
                     with(sharedTransitionScope) {
@@ -733,7 +733,7 @@ fun TransactionItem(tx: TransactionInfo, hideAmounts: Boolean = false, modifier:
     Row(
         modifier = modifier
             .fillMaxWidth()
-           .padding(start = 24.dp, end = 12.dp, vertical = 6.dp),
+           .padding(start = 24.dp, end = 12.dp, top = 6.dp, bottom = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.End
     ) {
