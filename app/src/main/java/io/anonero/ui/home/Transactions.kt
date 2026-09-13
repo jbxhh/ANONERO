@@ -645,8 +645,9 @@ fun TransactionScreen(
             },
             indicator = { }
         ) {
-            LazyColumn(
-                contentPadding = contentPadding
+               LazyColumn(
+                contentPadding = contentPadding,
+                verticalArrangement = Arrangement.SpaceBetween
             ) {
                 stickyHeader(key = "progress") {
                     Column {
@@ -694,7 +695,7 @@ fun TransactionScreen(
                         )
                     }
                 }
-                val visibleTransactions = transactions.drop(1)
+                                val visibleTransactions = transactions.drop(1)
                 items(visibleTransactions.size, key = { visibleTransactions[it].getListKey() }) {
                     with(sharedTransitionScope) {
                         TransactionItem(
