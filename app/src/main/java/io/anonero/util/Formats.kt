@@ -34,7 +34,17 @@ object Formats {
         if (d.scale() < 2) d = d.setScale(2, RoundingMode.UNNECESSARY)
         return d.toPlainString()
     }
-
+    fun getDisplayAmountAdaptive(amount: Long, maxChars: Int = 13): String {
+        var s = getDisplayAmount(amount)
+        if (s.length <= maxChars) return s
+        var scale = AnonConfig.XMR_DECIMALS
+        while (s.length > maxChars && scale > 0) {
+            scale--
+            s = BigDecimal(amount).scaleByPowerOfTen(-AnonConfig.XMR_DECIMALS)
+                .setScale(scale, RoundingMode.HALF_UP).toPlainString()
+        }
+        return s
+    }
         fun formatTransactionTime(timestamp: Long, pattern: String = "HH:mm\nMM/dd"): String {
         val instant =
             Instant.ofEpochSecond(timestamp)
