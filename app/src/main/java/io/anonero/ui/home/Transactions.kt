@@ -685,19 +685,18 @@ fun TransactionScreen(
                                     navigateTo(CoinsScreenRoute)
                                 }
                             )
-                            .fillParentMaxWidth()
+                          .fillParentMaxWidth()
                     ) {
-                    Text(
-                       if (hideAmounts) Formats.maskAmount(balance ?: 0)
-                       else Formats.getDisplayAmountAdaptive(balance ?: 0),
-                        style = MaterialTheme.typography
-                             .displaySmall,
-                             maxLines = 1,
-                             modifier = Modifier
-                            .fillParentMaxWidth()
-                            .padding(end = 24.dp),
-                             textAlign = TextAlign.End
-                           )
+                        Text(
+                            if (hideAmounts) Formats.maskAmount(balance ?: 0)
+                            else Formats.getDisplayAmountAdaptive(balance ?: 0),
+                            style = MaterialTheme.typography
+                                .displaySmall,
+                            maxLines = 1,
+                            modifier = Modifier
+                                .fillParentMaxWidth()
+                                .padding(end = 24.dp),
+                            textAlign = TextAlign.End
                         )
                     }
                 }
