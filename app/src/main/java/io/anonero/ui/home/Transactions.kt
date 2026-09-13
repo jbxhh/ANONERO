@@ -686,7 +686,8 @@ fun TransactionScreen(
                                 }
                             )
                             .fillParentMaxWidth()
-                    ) Text(
+                    ) {
+                    Text(
                        if (hideAmounts) Formats.maskAmount(balance ?: 0)
                        else Formats.getDisplayAmountAdaptive(balance ?: 0),
                         style = MaterialTheme.typography
