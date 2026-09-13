@@ -691,7 +691,7 @@ fun TransactionScreen(
                             style = MaterialTheme.typography
                                 .displaySmall,
                             modifier = Modifier.fillParentMaxWidth(),
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.End
                         )
                     }
                 }
