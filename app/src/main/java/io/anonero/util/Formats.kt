@@ -26,11 +26,11 @@ object Formats {
         return "#".repeat(plain.length)
     }
 
-    fun getDisplayAmount(amount: Long): String {
+        fun getDisplayAmount(amount: Long): String {
 
-        if (amount == 0L) return "0.00000000"
+        if (amount == 0L) return "0.000000000000"
         var d = BigDecimal(amount).scaleByPowerOfTen(-AnonConfig.XMR_DECIMALS)
-            .setScale(8, RoundingMode.HALF_UP)
+            .setScale(AnonConfig.XMR_DECIMALS, RoundingMode.HALF_UP)
         if (d.scale() < 2) d = d.setScale(2, RoundingMode.UNNECESSARY)
         return d.toPlainString()
     }
