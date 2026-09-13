@@ -733,7 +733,7 @@ fun TransactionItem(tx: TransactionInfo, hideAmounts: Boolean = false, modifier:
     Row(
         modifier = modifier
             .fillMaxWidth()
-           .padding(start = 24.dp, end = 12.dp, top = 6.dp, bottom = 6.dp),
+           .padding(start = 16.dp, end = 12.dp, top = 6.dp, bottom = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.End
     ) {
