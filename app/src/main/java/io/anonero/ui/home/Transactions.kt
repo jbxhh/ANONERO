@@ -690,12 +690,17 @@ fun TransactionScreen(
                             else Formats.getDisplayAmount(balance ?: 0),
                             style = MaterialTheme.typography
                                 .displaySmall,
-                            modifier = Modifier.fillParentMaxWidth(),
+                                modifier = Modifier
+                                .fillParentMaxWidth()
+                                .padding(end = 24.dp),
                             textAlign = TextAlign.End
                         )
                     }
                 }
-                                val visibleTransactions = transactions.drop(1)
+               val visibleTransactions = transactions.drop(1)
+                    item(key = "balance_space") {
+                    Spacer(Modifier.height(44.dp))
+                }
                 items(visibleTransactions.size, key = { visibleTransactions[it].getListKey() }) {
                     with(sharedTransitionScope) {
                         TransactionItem(
