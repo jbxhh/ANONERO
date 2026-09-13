@@ -786,4 +786,3 @@ private fun TransactionScreenReview() {
 //            sharedTransitionScope = this@SharedTransitionLayout
 //        )
     }
-}
