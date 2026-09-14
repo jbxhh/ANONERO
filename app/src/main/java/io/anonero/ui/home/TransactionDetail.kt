@@ -252,7 +252,8 @@ fun TransactionDetailScreen(
                 item {
                     with(sharedTransitionScope) {
                         TransactionItem(
-                            tx = transactionInfo!!,
+                            tx = transactionInfo!!, 
+                            amountCenter = true,
                             modifier = Modifier
                                 .clickable {
 
