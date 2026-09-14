@@ -727,15 +727,15 @@ fun TransactionScreen(
 
 
 @Composable
-fun TransactionItem(tx: TransactionInfo, hideAmounts: Boolean = false, modifier: Modifier = Modifier) {
+fun TransactionItem(tx: TransactionInfo, hideAmounts: Boolean = false, amountCenter: Boolean = false, modifier: Modifier = Modifier) {
     val isIncoming = tx.direction == TransactionInfo.Direction.Direction_In
     val amount = tx.amount
     Row(
         modifier = modifier
             .fillMaxWidth()
-           .padding(start = 24.dp, end = 20.dp, top = 6.dp, bottom = 6.dp),
+            .padding(start = 24.dp, end = 20.dp, top = 6.dp, bottom = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.End
+        horizontalArrangement = if (amountCenter) Arrangement.Start else Arrangement.End
     ) {
         Icon(
             if (isIncoming) AnonIcons.ArrowDownLeft else AnonIcons.ArrowUpRight,
@@ -746,8 +746,10 @@ fun TransactionItem(tx: TransactionInfo, hideAmounts: Boolean = false, modifier:
         Text(
             if (hideAmounts) Formats.maskAmount(amount)
             else Formats.getDisplayAmount(amount),
-            textAlign = TextAlign.End,
-            modifier = Modifier.padding(start = 10.dp),
+            textAlign = if (amountCenter) TextAlign.Center else TextAlign.End,
+            modifier = Modifier
+                .padding(start = 10.dp)
+                .then(if (amountCenter) Modifier.weight(1f) else Modifier),
             style = MaterialTheme.typography.titleLarge
         )
     }
