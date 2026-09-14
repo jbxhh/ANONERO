@@ -739,7 +739,7 @@ fun TransactionItem(tx: TransactionInfo, hideAmounts: Boolean = false, amountCen
     ) {
         Icon(
             if (isIncoming) AnonIcons.ArrowDownLeft else AnonIcons.ArrowUpRight,
-            modifier = Modifier.size(18.dp),
+            modifier = Modifier.size(32.dp),
             tint = if (isIncoming) MaterialTheme.colorScheme.primary else LocalContentColor.current,
             contentDescription = null
         )
