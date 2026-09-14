@@ -218,7 +218,7 @@ fun ReviewTransactionScreen(
 
     val titleStyle = MaterialTheme.typography.bodyLarge.copy(
         color = MaterialTheme.colorScheme.primary,
-        fontSize = 20.sp
+        fontSize = 16.sp
     )
     val subTitleStyle = MaterialTheme.typography.bodyMedium.copy(
         color = MaterialTheme.colorScheme.onBackground,
