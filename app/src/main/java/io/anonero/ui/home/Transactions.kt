@@ -628,7 +628,7 @@ fun TransactionScreen(
         }
     ) { contentPadding ->
         PullToRefreshBox(
-            isRefreshing = false,
+        isRefreshing = showIndefiniteLoading,
             state = refreshState,
             modifier = Modifier
                 .hazeSource(
