@@ -2,7 +2,6 @@ package io.anonero.ui.home
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import AnonNeroTheme 
-import androidx.compose.animation.core.tween
 import androidx.compose.material3.ExperimentalMaterial3Api
 import android.view.HapticFeedbackConstants
 import androidx.activity.compose.BackHandler
@@ -576,18 +575,13 @@ fun TransactionScreen(
                             )
                                DropdownMenuItem(
                                 text = { Text(stringResource(R.string.refresh)) },
-                                onClick = {
-                                    // Trigger the pull-to-refresh indicator visually and run refresh
-                                    showMenu = false
-                                    scope.launch {
-                                        view.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
-                                        // show pull-to-refresh indicator
-                                        refreshState.animateTo(1f, tween(300))
-                                        walletState.setLoading(true)
-                                        try {
+                                                                    onClick = {
+                                        showMenu = false
+                                        scope.launch {
+                                            view.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+                                            walletState.setLoading(true)
                                             walletState.refresh()
-                                        } finally {
-                                            delay(3000)
+                                            delay(2000)
                                             walletState.setLoading(false)
                                             refreshState.animateToHidden()
                                         }
