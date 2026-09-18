@@ -2,6 +2,7 @@ package io.anonero.ui.home
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import AnonNeroTheme 
+import androidx.compose.animation.core.tween
 import androidx.compose.material3.ExperimentalMaterial3Api
 import android.view.HapticFeedbackConstants
 import androidx.activity.compose.BackHandler
@@ -581,7 +582,7 @@ fun TransactionScreen(
                                     scope.launch {
                                         view.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
                                         // show pull-to-refresh indicator
-                                        refreshState.animateTo(1f)
+                                        refreshState.animateTo(1f, tween(300))
                                         walletState.setLoading(true)
                                         try {
                                             walletState.refresh()
