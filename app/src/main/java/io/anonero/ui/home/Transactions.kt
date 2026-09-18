@@ -586,7 +586,6 @@ fun TransactionScreen(
                                             refreshState.animateToHidden()
                                         }
                                     }
-                                }
                             )
                         
                             if (AnonConfig.viewOnly) {
