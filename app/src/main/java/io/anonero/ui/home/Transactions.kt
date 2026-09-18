@@ -632,7 +632,7 @@ fun TransactionScreen(
                     view.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
                     walletState.setLoading(true)
                     walletState.refresh()
-                    delay(3000)
+                    delay(2000)
                     walletState.setLoading(false)
                 }
             },
