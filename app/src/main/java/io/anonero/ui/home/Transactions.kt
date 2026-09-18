@@ -687,7 +687,7 @@ fun TransactionScreen(
                             maxLines = 1,
                             modifier = Modifier
                                 .fillParentMaxWidth()
-                                .padding(end = 20.dp),
+                                .padding(end = 28.dp),
                             textAlign = TextAlign.End
                         )
                     }
@@ -725,7 +725,7 @@ fun TransactionItem(tx: TransactionInfo, hideAmounts: Boolean = false, amountCen
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(start = 24.dp, end = 20.dp, top = 6.dp, bottom = 6.dp),
+            .padding(start = 24.dp, end = 28.dp, top = 6.dp, bottom = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = if (amountCenter) Arrangement.Start else Arrangement.End
     ) {
