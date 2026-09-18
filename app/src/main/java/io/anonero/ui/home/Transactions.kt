@@ -583,7 +583,6 @@ fun TransactionScreen(
                                             walletState.refresh()
                                             delay(2000)
                                             walletState.setLoading(false)
-                                            refreshState.animateToHidden()
                                         }
                                     }
                             )
