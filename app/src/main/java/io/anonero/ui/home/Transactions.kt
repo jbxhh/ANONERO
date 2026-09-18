@@ -627,14 +627,10 @@ fun TransactionScreen(
                 .hazeSource(
                     state = hazeState,
                 ),
-            onRefresh = {
+               onRefresh = {
                 scope.launch {
                     view.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
-                    walletState.setLoading(true)
                     walletState.refresh()
-                    delay(2000)
-                    walletState.setLoading(false)
-                    refreshState.animateToHidden()
                 }
             },
             indicator = { }
