@@ -660,7 +660,7 @@ fun TransactionScreen(
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(
-                                "拉��开始刷新",
+                                "拉动开始刷新",
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier.padding(
                                     top = 16.dp, bottom = 8.dp
