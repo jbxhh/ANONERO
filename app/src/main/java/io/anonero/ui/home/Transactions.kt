@@ -621,16 +621,19 @@ fun TransactionScreen(
         }
     ) { contentPadding ->
         PullToRefreshBox(
-        isRefreshing = showIndefiniteLoading,
+          isRefreshing = false,
             state = refreshState,
             modifier = Modifier
                 .hazeSource(
                     state = hazeState,
                 ),
-               onRefresh = {
+                           onRefresh = {
                 scope.launch {
                     view.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+                    walletState.setLoading(true)
                     walletState.refresh()
+                    delay(3000)
+                    walletState.setLoading(false)
                 }
             },
             indicator = { }
