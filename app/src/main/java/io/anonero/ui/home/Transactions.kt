@@ -644,7 +644,7 @@ fun TransactionScreen(
                     refreshState.animateToHidden()
                 }
             },
-            indicator = { }
+            
         ) {
                LazyColumn(
                 contentPadding = contentPadding,
