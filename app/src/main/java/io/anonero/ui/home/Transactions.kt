@@ -581,7 +581,7 @@ fun TransactionScreen(
                                     scope.launch {
                                         view.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
                                         // show pull-to-refresh indicator
-                                        refreshState.snapTo(1f)
+                                        refreshState.animateTo(1f)
                                         walletState.setLoading(true)
                                         try {
                                             walletState.refresh()
@@ -644,7 +644,7 @@ fun TransactionScreen(
                     refreshState.animateToHidden()
                 }
             },
-            
+            indicator = { }
         ) {
                LazyColumn(
                 contentPadding = contentPadding,
