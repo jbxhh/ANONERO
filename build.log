@@ -11,36 +11,36 @@ For more details see https://docs.gradle.org/8.13/release-notes.html
 To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.13/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
 Daemon will be stopped at the end of the build 
 Calculating task graph as no cached configuration is available for tasks: :app:assembleAnonDebug
-> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
 > Task :app:preBuild UP-TO-DATE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
 > Task :app:preAnonDebugBuild UP-TO-DATE
 > Task :app:mergeAnonDebugNativeDebugMetadata NO-SOURCE
 > Task :app:createAnonDebugCompatibleScreenManifests
 > Task :app:generateAnonDebugBuildConfig
 > Task :app:generateAnonDebugResValues
-> Task :app:javaPreCompileAnonDebug
 > Task :app:mergeAnonDebugShaders
-> Task :app:extractDeepLinksAnonDebug
-> Task :app:checkAnonDebugAarMetadata
 > Task :app:generateAnonDebugResources
+> Task :app:javaPreCompileAnonDebug
 > Task :app:mapAnonDebugSourceSetPaths
+> Task :app:checkAnonDebugAarMetadata
+> Task :app:extractDeepLinksAnonDebug
 > Task :app:compileAnonDebugShaders NO-SOURCE
 > Task :app:generateAnonDebugAssets UP-TO-DATE
 > Task :app:packageAnonDebugResources
 > Task :app:mergeAnonDebugAssets
 > Task :app:compressAnonDebugAssets
 > Task :app:desugarAnonDebugFileDependencies
-> Task :app:parseAnonDebugLocalResources
 > Task :app:processAnonDebugMainManifest
 > Task :app:processAnonDebugManifest
-> Task :app:processAnonDebugManifestForPackage
+> Task :app:parseAnonDebugLocalResources
 > Task :app:mergeAnonDebugJniLibFolders
-> Task :app:mergeAnonDebugNativeLibs
+> Task :app:processAnonDebugManifestForPackage
 > Task :app:checkAnonDebugDuplicateClasses
 > Task :app:validateSigningAnonDebug
 > Task :app:mergeLibDexAnonDebug
 > Task :app:writeAnonDebugAppMetadata
 > Task :app:writeAnonDebugSigningConfigVersions
+> Task :app:mergeAnonDebugNativeLibs
 
 > Task :app:stripAnonDebugDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so, libimage_processing_util_jni.so, libsurface_util_jni.so, libtor.so, libtorexec.so. Run with --info option to learn more.
@@ -48,55 +48,8 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:mergeAnonDebugResources
 > Task :app:processAnonDebugResources
 > Task :app:mergeExtDexAnonDebug
-
 > Task :app:compileAnonDebugKotlin
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:484:9 No value passed for parameter 'content'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:588:38 Syntax error: Expecting ')'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:590:29 Syntax error: Expecting an element.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:619:22 Syntax error: Expecting ')'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:624:5 Syntax error: Expecting a top level declaration.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:624:7 Syntax error: Expecting a top level declaration.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:624:7 Functions which invoke @Composable functions must be marked with the @Composable annotation
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:624:7 Function declaration must have a name.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:624:9 Unresolved reference 'contentPadding'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:624:24 Syntax error: Unexpected tokens (use ';' to separate expressions on the same line).
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:625:9 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:626:24 Unresolved reference 'showIndefiniteLoading'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:627:21 Unresolved reference 'refreshState'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:630:29 Unresolved reference 'hazeState'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:633:17 Unresolved reference 'scope'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:634:21 Unresolved reference 'view'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:635:21 Unresolved reference 'walletState'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:636:21 Unresolved reference 'walletState'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:638:21 Unresolved reference 'walletState'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:639:21 Unresolved reference 'refreshState'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:645:34 Unresolved reference 'contentPadding'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:651:56 Unresolved reference 'refreshState'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:654:39 Unresolved reference 'refreshState'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:654:79 Unresolved reference 'showIndefiniteLoading'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:678:45 Unresolved reference 'walletState'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:680:37 Unresolved reference 'navigateTo'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:686:33 Unresolved reference 'hideAmounts'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:686:65 Unresolved reference 'balance'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:687:67 Unresolved reference 'balance'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:698:42 Unresolved reference 'transactions'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:702:43 Function invocation 'size(...)' expected.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:702:57 Cannot infer type for type parameter 'V'. Specify it explicitly.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:702:81 Unresolved reference 'getListKey'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:703:21 Cannot infer type for type parameter 'T'. Specify it explicitly.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:703:26 Unresolved reference 'sharedTransitionScope'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:703:49 Cannot infer type for type parameter 'T'. Specify it explicitly.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:705:29 Argument type mismatch: actual type is 'V? (of fun <K, V> Map<out K, V>.get)', but 'TransactionInfo' was expected.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:705:29 Cannot infer type for type parameter 'V'. Specify it explicitly.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:705:68 Unresolved reference 'hideAmounts'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:707:37 Unresolved reference 'onItemClick'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:707:49 Cannot infer type for type parameter 'V'. Specify it explicitly.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:709:34 Unresolved reference 'sharedElement'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:710:37 Unresolved reference 'sharedTransitionScope'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:711:50 Cannot infer type for type parameter 'V'. Specify it explicitly.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:711:74 Unresolved reference 'hash'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:713:63 Unresolved reference 'animatedContentScope'.
-e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:721:1 Syntax error: Expecting a top level declaration.
+e: file:///home/runner/work/ANONERO/ANONERO/app/src/main/java/io/anonero/ui/home/Transactions.kt:784:6 Syntax error: Expecting '}'.
 
 > Task :app:compileAnonDebugKotlin FAILED
 
@@ -303,6 +256,6 @@ Caused by: org.jetbrains.kotlin.gradle.tasks.CompilationErrorException: Compilat
 	... 2 more
 
 
-BUILD FAILED in 51s
+BUILD FAILED in 52s
 29 actionable tasks: 29 executed
 Configuration cache entry stored.
