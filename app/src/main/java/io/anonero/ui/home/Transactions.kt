@@ -784,4 +784,3 @@ private fun TransactionScreenReview() {
 //        )
     }
 
-}
