@@ -1,5 +1,6 @@
 package io.anonero.ui.theme
 
+import io.anonero.ui.theme.Typography
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.safeContentPadding
