@@ -57,25 +57,8 @@ fun SubAddressLabelDialog(label: String, onSave: (String) -> Unit, onCancel: () 
     val view = LocalView.current
     val scope = rememberCoroutineScope()
 
-    fun saveLabel() {
-        if (labelString.text.isEmpty()) {
-            scope.launch {
-                errorShake.shake(
-                    ShakeConfig(
-                        6, translateX = 5f
-                    )
-                )
-                repeat(6) {
-                    delay(50)
-                    view.performHapticFeedback(
-                        HapticFeedbackConstants.CONTEXT_CLICK
-                    )
-                }
-                delay(100)
-            }
-        } else {
-            onSave(labelString.text)
-        }
+        fun saveLabel() {
+        onSave(labelString.text)
     }
 
     LaunchedEffect(true) {
@@ -154,12 +137,8 @@ fun SubAddressLabelDialog(label: String, onSave: (String) -> Unit, onCancel: () 
                     containerColor = MaterialTheme.colorScheme.onBackground,
 
                     ),
-                onClick = {
-                    if (labelString.text.isEmpty()) {
-                        saveLabel()
-                    } else {
-                        onSave(labelString.text)
-                    }
+                    onClick = {
+                    onSave(labelString.text)
                 }) { Text("确认") }
         },
         dismissButton = {
