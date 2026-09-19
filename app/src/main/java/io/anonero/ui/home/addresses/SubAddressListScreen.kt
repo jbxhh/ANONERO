@@ -131,7 +131,7 @@ fun SubAddressesScreen(
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 Text(
-                                address.displayLabel.ifEmpty { "添加标签 ${address.addressIndex}" }
+                                address.displayLabel.ifEmpty { "添加标签 ${address.addressIndex}" },
                                     color = MaterialTheme.colorScheme.primary,
                                     modifier = Modifier.clickable {
                                         editingAddress = address
